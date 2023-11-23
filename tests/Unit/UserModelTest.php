@@ -14,10 +14,7 @@ class UserTest extends TestCase
         // Criar um mock para a classe SuporteTarefa
         $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
         
-        // Definir expectativas no mock
-        $suporteTarefaMock->shouldReceive('exemplo')->andReturn('algum_valor');
-
-        // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
+                // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
         $user = new User();
 
         // Associar o mock ao método suporteTarefas
