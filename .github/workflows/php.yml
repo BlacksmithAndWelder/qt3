@@ -17,6 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: clear key cache
+      run: php artisan config:cache
+          
+
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
@@ -54,9 +58,7 @@ jobs:
         - name: Install dependencies with composer
           run: composer update --no-ansi --no-interaction --no-progress
           
-        - name : clear key cache
-          run: php artisan cache:clear
-          
+       
         - name: Run tests with phpunit/phpunit
           run: vendor/bin/phpunit --coverage-clover=coverage.xml
           
