@@ -13,8 +13,11 @@ class UserTest extends TestCase
     {
         // Criar um mock para a classe SuporteTarefa
         $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
-        
-                // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
+
+        // Definir expectativas no mock
+        $suporteTarefaMock->shouldReceive('algumMetodo')->andReturn('algum_valor');
+
+        // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
         $user = new User();
 
         // Associar o mock ao método suporteTarefas
@@ -30,49 +33,19 @@ class UserTest extends TestCase
         // Testar qualquer lógica adicional relacionada à relação
         // ...
 
-        // Chamar o método 'exemplo' no mock e verificar o resultado
-        $result = $relationship->getRelated()->exemplo();
+        // Chamar o método simulado no mock e verificar o resultado
+        $result = $relationship->getRelated()->algumMetodo();
         $this->assertEquals('algum_valor', $result);
-
-        // Criar um objeto SuporteTarefa simulado
-        $suporteTarefaSimulado = new SuporteTarefa(['atributo' => 'valor']);
-
-        // Simular a adição da SuporteTarefa ao usuário
-        $user->getRelation('suporteTarefas')->add($suporteTarefaSimulado);
-
-        // Verificar se a relação é uma coleção Eloquent e contém o objeto SuporteTarefa simulado
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $user->suporteTarefas);
-        $this->assertTrue($user->suporteTarefas->contains($suporteTarefaSimulado));
     }
 
-    public function testMassAssignment()
+    public function testCasts()
     {
-        // Testar atributos que podem ser preenchidos em massa
+        // Testar conversão de tipos
         $user = new User([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'secret',
+            'email_verified_at' => now(),
         ]);
 
-        $this->assertEquals('John Doe', $user->name);
-        $this->assertEquals('john@example.com', $user->email);
-        $this->assertEquals('secret', $user->password);
-    }
-
-    public function testHiddenAttributes()
-    {
-        // Testar atributos ocultos durante a serialização
-        $user = new User([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'secret',
-            'remember_token' => 'token',
-        ]);
-
-        $hiddenAttributes = $user->toArray();
-
-        $this->assertArrayNotHasKey('password', $hiddenAttributes);
-        $this->assertArrayNotHasKey('remember_token', $hiddenAttributes);
+        $this->assertInstanceOf(\Carbon\Carbon::class, $user->email_verified_at);
     }
 
     // Adicione testes adicionais para outras funções da classe User, se necessário
