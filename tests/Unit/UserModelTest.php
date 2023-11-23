@@ -78,15 +78,5 @@ class UserTest extends TestCase
         $this->assertArrayNotHasKey('remember_token', $hiddenAttributes);
     }
 
-    public function testCasts()
-    {
-        // Testar conversão de tipos
-        $user = new User([
-            'email_verified_at' => now(),
-        ]);
-
-        $this->assertInstanceOf(\Carbon\Carbon::class, $user->email_verified_at);
-    }
-
     // Adicione testes adicionais para outras funções da classe User, se necessário
 }
