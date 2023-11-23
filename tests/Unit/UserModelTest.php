@@ -13,8 +13,8 @@ class UserTest extends TestCase
     {
         // Criar um mock para a classe SuporteTarefa
         $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
-
-        // Definir expectativas no mock (por exemplo, assume que existe um método chamado 'exemplo')
+        
+        // Definir expectativas no mock
         $suporteTarefaMock->shouldReceive('exemplo')->andReturn('algum_valor');
 
         // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
@@ -82,7 +82,7 @@ class UserTest extends TestCase
     {
         // Testar conversão de tipos
         $user = new User([
-            'email_verified_at' => '2023-01-01 12:00:00',
+            'email_verified_at' => now(),
         ]);
 
         $this->assertInstanceOf(\Carbon\Carbon::class, $user->email_verified_at);
