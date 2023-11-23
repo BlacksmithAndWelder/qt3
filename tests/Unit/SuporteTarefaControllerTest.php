@@ -83,6 +83,8 @@ class SuporteTarefaStatusControllerTest extends TestCase
     {
         // Configurar o mock para lançar uma exceção de validação
         $this->statusModelMock->method('create')->willThrowException(new ValidationException(''));
+        $suporteTarefaMock->shouldReceive('exemplo')->andReturn('algum_valor');
+
 
         // Executar a função salvar
         $this->expectException(ValidationException::class);
