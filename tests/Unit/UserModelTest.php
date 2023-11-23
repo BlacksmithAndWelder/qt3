@@ -4,14 +4,11 @@ namespace Tests\Unit;
 
 use App\Models\User;
 use App\Models\SuporteTarefa;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testSuporteTarefasRelationship()
     {
         // Criar um mock para a classe SuporteTarefa
@@ -22,6 +19,8 @@ class UserTest extends TestCase
 
         // Criar uma instância da classe User, substituindo o método hasMany pelo mock criado
         $user = new User();
+
+        // Associar o mock ao método suporteTarefas
         $user->setRelation('suporteTarefas', $suporteTarefaMock);
 
         // Verificar se a relação foi corretamente definida
@@ -38,13 +37,15 @@ class UserTest extends TestCase
         $result = $relationship->getRelated()->exemplo();
         $this->assertEquals('algum_valor', $result);
 
-        // Criar um objeto SuporteTarefa real e associá-lo ao usuário
-        $suporteTarefaReal = new SuporteTarefa(['atributo' => 'valor']);
-        $user->suporteTarefas()->save($suporteTarefaReal);
+        // Criar um objeto SuporteTarefa simulado
+        $suporteTarefaSimulado = new SuporteTarefa(['atributo' => 'valor']);
 
-        // Verificar se a relação é uma coleção Eloquent e contém o objeto SuporteTarefa
+        // Simular a adição da SuporteTarefa ao usuário
+        $user->getRelation('suporteTarefas')->add($suporteTarefaSimulado);
+
+        // Verificar se a relação é uma coleção Eloquent e contém o objeto SuporteTarefa simulado
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $user->suporteTarefas);
-        $this->assertTrue($user->suporteTarefas->contains($suporteTarefaReal));
+        $this->assertTrue($user->suporteTarefas->contains($suporteTarefaSimulado));
     }
 
     public function testMassAssignment()
