@@ -1,0 +1,11 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/welcome/welcome.js": "/js/welcome/welcome.js",
+    "/js/nasa/detalhe.js": "/js/nasa/detalhe.js",
+    "/js/layout/main.js": "/js/layout/main.js",
+    "/js/layout/componentes/modal.js": "/js/layout/componentes/modal.js",
+    "/css/app.css": "/css/app.css",
+    "/css/nasa/detalhe.css": "/css/nasa/detalhe.css",
+    "/css/welcome/welcome.css": "/css/welcome/welcome.css",
+    "/css/layout/main.css": "/css/layout/main.css"
+}

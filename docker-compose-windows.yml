@@ -1,0 +1,30 @@
+version: '3.0'
+
+services:
+  web:
+    image: projeto-b2
+    privileged: true 
+    container_name: projeto-b2
+    volumes:
+      - ./:/projeto/
+    ports:
+      - "8000:8000"
+    command: ["sleep","infinity"]
+  postgres:
+      image: postgres:15.1-alpine
+      container_name: db-projeto-b2
+      environment:
+        POSTGRES_DB: projeto-b2
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: admin
+        PGDATA: /data/db-projeto-b2
+      volumes:
+        - ./:/db-projeto/
+      ports:
+        - "5432:5432"
+      restart: unless-stopped
+      
+networks:
+  default:
+    name: my-bridge-network
+    external: true
