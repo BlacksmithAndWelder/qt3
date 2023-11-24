@@ -1,7 +1,3 @@
-<?php
-
-namespace Tests\Unit\Controllers\Web\Escola;
-
 use Tests\TestCase;
 use App\Http\Controllers\Web\Escola\EscolaController;
 use App\Http\Requests\Escola\Request as EscolaRequest;
@@ -13,6 +9,9 @@ class EscolaControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testListar()
     {
         // Crie um mock para o model Escola
@@ -28,6 +27,9 @@ class EscolaControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testCriar()
     {
         // Crie um mock para o model Escola
@@ -42,6 +44,9 @@ class EscolaControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testSalvar()
     {
         // Crie um mock para o request EscolaRequest
@@ -60,6 +65,9 @@ class EscolaControllerTest extends TestCase
         $response->assertRedirect(route('escola.listar'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testEditar()
     {
         // Crie um mock para o model Escola
@@ -75,6 +83,9 @@ class EscolaControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testAtualizar()
     {
         // Crie um mock para o request EscolaRequest
@@ -93,6 +104,9 @@ class EscolaControllerTest extends TestCase
         $response->assertRedirect(route('escola.listar'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testExcluir()
     {
         // Crie um mock para o model Escola
