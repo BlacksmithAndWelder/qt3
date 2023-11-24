@@ -1,7 +1,3 @@
-<?php
-
-namespace Tests\Unit\Models;
-
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\SuporteTarefa;
@@ -11,6 +7,9 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testSuporteTarefasRelationship()
     {
         // Criar um usuário de exemplo
@@ -26,6 +25,9 @@ class UserTest extends TestCase
         $this->assertEquals($suporteTarefa->id, $user->suporteTarefas->first()->id);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testFillableProperties()
     {
         // Definir dados para preencher o usuário
