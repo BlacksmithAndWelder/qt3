@@ -37,6 +37,9 @@ class ViewConfigTest extends TestCase
                 return realpath(__DIR__ . '/../path/to/your/storage/' . $path);
             });
 
+        // Define a constant to mock __DIR__
+        define('__DIR__', realpath(__DIR__ . '/../path/to/your/test'));
+
         // Set up the expected configuration array
         $expectedConfig = [
             'paths' => [
