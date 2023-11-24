@@ -1,11 +1,13 @@
-// AlunoTest.php
-
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AlunoTest extends TestCase {
+    
+    /**
+     * @codeCoverageIgnore
+     */
     public function testTurmaMethodReturnsHasOneRelation() {
         // Criar uma instância de Aluno
         $aluno = new Aluno([
