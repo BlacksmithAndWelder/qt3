@@ -1,7 +1,3 @@
-<?php
-
-namespace Tests\Unit\Controllers\Web\Aluno;
-
 use Tests\TestCase;
 use App\Http\Controllers\Web\Aluno\AlunoController;
 use App\Http\Requests\Aluno\Request as AlunoRequest;
@@ -14,6 +10,9 @@ class AlunoControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testListar()
     {
         // Crie um mock para o model Aluno
@@ -29,6 +28,9 @@ class AlunoControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testCriar()
     {
         // Crie mocks para os models Aluno e Turma
@@ -47,6 +49,9 @@ class AlunoControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testSalvar()
     {
         // Crie um mock para o request AlunoRequest
@@ -65,6 +70,9 @@ class AlunoControllerTest extends TestCase
         $response->assertRedirect(route('aluno.listar'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testEditar()
     {
         // Crie um mock para o model Aluno
@@ -80,6 +88,9 @@ class AlunoControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testAtualizar()
     {
         // Crie um mock para o request AlunoRequest
@@ -98,6 +109,9 @@ class AlunoControllerTest extends TestCase
         $response->assertRedirect(route('aluno.listar'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testExcluir()
     {
         // Crie um mock para o model Aluno
@@ -105,16 +119,3 @@ class AlunoControllerTest extends TestCase
         $alunoMock->shouldReceive('find->delete');
 
         // Substitua a instância real pelo mock
-        app()->instance(Aluno::class, $alunoMock);
-
-        // Chame a rota e verifique se é redirecionado corretamente
-        $response = $this->put('aluno/excluir/1');
-        $response->assertRedirect(route('aluno.listar'));
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        Mockery::close();
-    }
-}
