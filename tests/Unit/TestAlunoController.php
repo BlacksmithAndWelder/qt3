@@ -1,3 +1,4 @@
+<?php
 namespace Tests\Unit\Controllers\Web\Aluno;
 
 use App\Http\Controllers\Web\Aluno\AlunoController;

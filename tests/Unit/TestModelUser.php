@@ -1,3 +1,4 @@
+<?php
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\SuporteTarefa;

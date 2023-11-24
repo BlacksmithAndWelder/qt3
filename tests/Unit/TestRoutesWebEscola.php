@@ -1,3 +1,4 @@
+<?php
 use Tests\TestCase;
 use App\Http\Controllers\Web\Escola\EscolaController;
 use App\Http\Requests\Escola\Request as EscolaRequest;

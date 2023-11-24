@@ -1,3 +1,4 @@
+<?php
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;

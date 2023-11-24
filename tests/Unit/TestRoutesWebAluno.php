@@ -1,3 +1,4 @@
+<?php
 use Tests\TestCase;
 use App\Http\Controllers\Web\Aluno\AlunoController;
 use App\Http\Requests\Aluno\Request as AlunoRequest;
