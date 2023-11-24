@@ -1,4 +1,3 @@
-
 use Tests\TestCase;
 use App\Models\Turma;
 use App\Models\Escola;
@@ -8,6 +7,9 @@ class TurmaTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testEscolaRelationship()
     {
         // Criar uma escola de exemplo
@@ -23,6 +25,9 @@ class TurmaTest extends TestCase
         $this->assertEquals($escola->id, $turma->escola->id);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testFillableProperties()
     {
         // Definir dados para preencher a turma
