@@ -1,183 +1,144 @@
-// SuporteTarefaStatusControllerTest.php
+<?php
 
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Http\Controllers\Web\Suporte\SuporteTarefaStatusController;
+use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Validation\ValidationException;
+use App\Models\User as Usuario;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SuporteTarefaStatusControllerTest extends TestCase
+class SuporteTarefaControllerTest extends TestCase
 {
-    protected $controller;
-    protected $statusModelMock;
+    use RefreshDatabase;
 
-    public function setUp(): void
+    public function testListar()
     {
-        parent::setUp();
+        // Mock SuporteTarefa model
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $suporteTarefaMock->shouldReceive('with')->andReturnSelf();
+        $suporteTarefaMock->shouldReceive('get')->andReturn([]);
 
-        // Configurar o controlador
-        $this->controller = new SuporteTarefaStatusController();
+        // Expect a view with specified data
+        $this->expectsView('suporte-tarefa.listar', ['ListaSuporteTarefa' => []]);
 
-        // Configurar o mock para o modelo SuporteTarefaStatus
-        $this->statusModelMock = $this->getMockBuilder(SuporteTarefaStatus::class)->getMock();
-        $this->controller->setSuporteTarefaStatusModel($this->statusModelMock);
+        // Call the listar method
+        $response = $this->get(route('suporte-tarefa.listar'));
+
+        // Assertions
+        $response->assertStatus(200);
     }
 
-    public function testListarRetornaViewComDados()
+    public function testCriar()
     {
-        // Configurar o mock para retornar dados simulados
-        $this->statusModelMock->method('get')->willReturn(['status1', 'status2']);
+        // Mock SuporteTarefa, Usuario, and SuporteTarefaStatus models
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $usuarioMock = $this->mock(Usuario::class);
+        $suporteTarefaStatusMock = $this->mock(SuporteTarefaStatus::class);
 
-        // Executar a função listar
-        $result = $this->controller->listar();
+        // Mock get method for ListaUsuarios and ListaSuporteTarefaStatus
+        $usuarioMock->shouldReceive('get')->andReturn([]);
+        $suporteTarefaStatusMock->shouldReceive('get')->andReturn([]);
 
-        // Verificar se a view é retornada
-        $this->assertInstanceOf(View::class, $result);
+        // Expect a view with specified data
+        $this->expectsView('suporte-tarefa.criar', [
+            'SuporteTarefa' => new SuporteTarefa(),
+            'ListaSuporteTarefaStatus' => [],
+            'ListaUsuarios' => [],
+        ]);
 
-        // Verificar se a variável da view está correta
-        $data = $result->getData();
-        $this->assertArrayHasKey('ListaSuporteTarefaStatus', $data);
+        // Call the criar method
+        $response = $this->get(route('suporte-tarefa.criar'));
+
+        // Assertions
+        $response->assertStatus(200);
     }
 
-    public function testCriarRetornaView()
+    public function testSalvar()
     {
-        // Executar a função criar
-        $result = $this->controller->criar();
+        // Mock Usuario and SuporteTarefaStatus models
+        $usuarioMock = $this->mock(Usuario::class);
+        $suporteTarefaStatusMock = $this->mock(SuporteTarefaStatus::class);
 
-        // Verificar se a view é retornada
-        $this->assertInstanceOf(View::class, $result);
+        // Mock SuporteTarefa create method
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $suporteTarefaMock->shouldReceive('create')->andReturn(new SuporteTarefa());
+
+        // Call the salvar method with valid data
+        $response = $this->post(route('suporte-tarefa.salvar'), [
+            'user_id' => 1,
+            'status_id' => 1,
+            'urgente' => false,
+            'assunto' => 'Teste',
+            'descricao' => 'Descrição do teste',
+        ]);
+
+        // Assertions
+        $response->assertRedirect(route('suporte-tarefa.listar'));
+        $this->assertDatabaseHas('suporte_tarefas', ['assunto' => 'Teste']);
     }
 
-    public function testSalvarSucessoRedireciona()
+    public function testEditar()
     {
-        // Configurar o mock para criar com sucesso
-        $this->statusModelMock->method('create')->willReturn(new SuporteTarefaStatus());
+        // Mock SuporteTarefa, Usuario, and SuporteTarefaStatus models
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $usuarioMock = $this->mock(Usuario::class);
+        $suporteTarefaStatusMock = $this->mock(SuporteTarefaStatus::class);
 
-        // Executar a função salvar
-        $result = $this->controller->salvar(/* dados simulados */);
+        // Mock find methods for SuporteTarefa and where methods for ListaUsuarios and ListaSuporteTarefaStatus
+        $suporteTarefaMock->shouldReceive('find')->andReturn(new SuporteTarefa());
+        $usuarioMock->shouldReceive('get')->andReturn([]);
+        $suporteTarefaStatusMock->shouldReceive('get')->andReturn([]);
 
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
+        // Expect a view with specified data
+        $this->expectsView('suporte-tarefa.editar', [
+            'SuporteTarefa' => new SuporteTarefa(),
+            'ListaSuporteTarefaStatus' => [],
+            'ListaUsuarios' => [],
+        ]);
 
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
+        // Call the editar method with a valid ID
+        $response = $this->get(route('suporte-tarefa.editar', 1));
+
+        // Assertions
+        $response->assertStatus(200);
     }
 
-    public function testSalvarFalhaRedireciona()
+    public function testAtualizar()
     {
-        // Configurar o mock para criar com falha (lançar uma exceção)
-        $this->statusModelMock->method('create')->willThrowException(new \Exception());
+        // Mock Usuario and SuporteTarefaStatus models
+        $usuarioMock = $this->mock(Usuario::class);
+        $suporteTarefaStatusMock = $this->mock(SuporteTarefaStatus::class);
 
-        // Executar a função salvar
-        $result = $this->controller->salvar(/* dados simulados */);
+        // Mock find method for SuporteTarefa and where method for ListaUsuarios and ListaSuporteTarefaStatus
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $suporteTarefaMock->shouldReceive('find')->andReturn(new SuporteTarefa());
+        $usuarioMock->shouldReceive('get')->andReturn([]);
+        $suporteTarefaStatusMock->shouldReceive('get')->andReturn([]);
 
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
+        // Mock save method for SuporteTarefa
+        $suporteTarefaMock->shouldReceive('save');
 
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
+        // Call the atualizar method with valid data and ID
+        $response = $this->put(route('suporte-tarefa.atualizar', 1), [
+            'user_id' => 1,
+            'status_id' => 1,
+            'urgente' => false,
+            'assunto' => 'Teste Atualizado',
+            'descricao' => 'Descrição atualizada',
+        ]);
+
+        // Assertions
+        $response->assertRedirect(route('suporte-tarefa.listar'));
+        $this->assertDatabaseHas('suporte_tarefas', ['assunto' => 'Teste Atualizado']);
     }
 
-    public function testSalvarFalhaValidacao()
+    public function testExcluir()
     {
-        // Configurar o mock para lançar uma exceção de validação
-        $this->statusModelMock->method('create')->willThrowException(new ValidationException(''));
-        
+        // Mock SuporteTarefa model
+        $suporteTarefaMock = $this->mock(SuporteTarefa::class);
+        $suporteTarefaMock->shouldReceive('find')->andReturn(new SuporteTarefa());
+        $suporteTarefaMock->shouldReceive('delete');
 
+        // Call the excluir method with a valid ID
 
-        // Executar a função salvar
-        $this->expectException(ValidationException::class);
-        $this->controller->salvar(/* dados simulados */);
-    }
-
-    public function testEditarRetornaViewComDados()
-    {
-        // Configurar o mock para encontrar um status existente
-        $statusExistente = new SuporteTarefaStatus(['nome' => 'Status Existente']);
-        $this->statusModelMock->method('find')->willReturn($statusExistente);
-
-        // Executar a função editar
-        $result = $this->controller->editar(/* ID do status simulado */);
-
-        // Verificar se a view é retornada
-        $this->assertInstanceOf(View::class, $result);
-
-        // Verificar se a variável da view está correta
-        $data = $result->getData();
-        $this->assertArrayHasKey('SuporteTarefaStatus', $data);
-        $this->assertEquals('Status Existente', $data['SuporteTarefaStatus']->nome);
-    }
-
-    public function testAtualizarSucessoRedireciona()
-    {
-        // Configurar o mock para encontrar um status existente
-        $statusExistente = new SuporteTarefaStatus(['nome' => 'Status Existente']);
-        $this->statusModelMock->method('find')->willReturn($statusExistente);
-
-        // Configurar o mock para atualizar com sucesso
-        $this->statusModelMock->method('update')->willReturn(true);
-
-        // Executar a função atualizar
-        $result = $this->controller->atualizar(/* ID do status simulado, dados simulados */);
-
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
-
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
-    }
-
-    public function testAtualizarFalhaRedireciona()
-    {
-        // Configurar o mock para encontrar um status existente
-        $statusExistente = new SuporteTarefaStatus(['nome' => 'Status Existente']);
-        $this->statusModelMock->method('find')->willReturn($statusExistente);
-
-        // Configurar o mock para falhar ao atualizar
-        $this->statusModelMock->method('update')->willReturn(false);
-
-        // Executar a função atualizar
-        $result = $this->controller->atualizar(/* ID do status simulado, dados simulados */);
-
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
-
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
-    }
-
-    public function testExcluirSucessoRedireciona()
-    {
-        // Configurar o mock para excluir com sucesso
-        $this->statusModelMock->method('delete')->willReturn(true);
-
-        // Executar a função excluir
-        $result = $this->controller->excluir(/* ID do status simulado */);
-
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
-
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
-    }
-
-    public function testExcluirFalhaRedireciona()
-    {
-        // Configurar o mock para falhar ao excluir
-        $this->statusModelMock->method('delete')->willReturn(false);
-
-        // Executar a função excluir
-        $result = $this->controller->excluir(/* ID do status simulado */);
-
-        // Verificar se é uma instância de RedirectResponse
-        $this->assertInstanceOf(RedirectResponse::class, $result);
-
-        // Adicione mais verificações de redirecionamento, status e outras conforme necessário
-    }
-
-    // Adicione mais testes conforme necessário
-
-    protected function tearDown(): void
-    {
-        // Limpeza, se necessário
-        parent::tearDown();
-    }
-}
