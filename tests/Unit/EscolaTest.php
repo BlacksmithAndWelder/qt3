@@ -1,5 +1,3 @@
-<?php
-
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -8,6 +6,7 @@ use App\Models\Escola;
 class EscolaTest extends TestCase
 {
     /**
+     * @codeCoverageIgnore
      * A basic test Escola.
      *
      * @return void
@@ -27,3 +26,4 @@ class EscolaTest extends TestCase
         return $this->assertEquals(0, count($arrayCompared));
     }
 }
+
