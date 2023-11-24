@@ -1,5 +1,3 @@
-<?php
-
 namespace Tests\Unit\Controllers\Web\Aluno;
 
 use App\Http\Controllers\Web\Aluno\AlunoController;
@@ -18,6 +16,9 @@ class AlunoControllerTest extends TestCase
         Mockery::close();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testListar()
     {
         $alunoController = new AlunoController();
@@ -28,6 +29,9 @@ class AlunoControllerTest extends TestCase
         $this->assertInstanceOf(View::class, $alunoController->listar());
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testCriar()
     {
         $alunoController = new AlunoController();
@@ -41,6 +45,9 @@ class AlunoControllerTest extends TestCase
         $this->assertInstanceOf(View::class, $alunoController->criar());
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function testSalvar()
     {
         $alunoController = new AlunoController();
@@ -64,5 +71,5 @@ class AlunoControllerTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $alunoController->salvar($requestMock));
     }
 
-    // A   dicione mais testes para as outras funções do controlador conforme necessário
+    // Adicione mais testes para as outras funções do controlador conforme necessário
 }
