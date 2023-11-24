@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Controllers\Web\Aluno;
+namespace Tests\Unit;
 
 use App\Http\Controllers\Web\Aluno\AlunoController;
 use App\Http\Requests\Aluno\Request as AlunoRequest;

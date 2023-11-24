@@ -1,5 +1,6 @@
 
 <?php
+namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
