@@ -1,7 +1,5 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use  App\Models\SuporteTarefa;
-
 
 // Importe a classe SuporteTarefa aqui se estiver em um namespace diferente
 // use Caminho\Para\SuporteTarefa;
