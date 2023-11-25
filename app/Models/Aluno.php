@@ -1,18 +1,34 @@
 <?php
 
-namespace App\Models;
+namespace Tests\Unit\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Aluno;
+use App\Models\Turma;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
-class Aluno extends Model
+class AlunoTest extends TestCase
 {
-    use HasFactory;
+    use DatabaseTransactions;
 
-    protected $table = 'alunos';
-    protected $fillable = ['nome', 'sobrenome', 'idade', 'bolsa_estudos', 'turma_id'];
+    public function tearDown(): void
+    {
+        m::close();
+    }
 
-    public function turma(){
-        return $this->hasOne(Turma::class,'id','turma_id');
+    public function testTurmaRelacionamento()
+    {
+        // Criar uma instância mock da classe Turma
+        $turmaMock = m::mock(Turma::class);
+
+        // Definir o comportamento esperado para o método hasOne
+        $aluno = new Aluno();
+        $aluno->shouldReceive('hasOne')->with(Turma::class, 'id', 'turma_id')->andReturn($turmaMock);
+
+        // Chamar o método turma() e verificar se ele retorna o mock da turma
+        $result = $aluno->turma();
+
+        $this->assertInstanceOf(Turma::class, $result);
     }
 }
