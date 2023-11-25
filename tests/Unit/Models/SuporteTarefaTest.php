@@ -12,7 +12,7 @@ class SuporteTarefaTest extends TestCase
         $suporteTarefaStatusMock = $this->createMock(SuporteTarefaStatus::class);
 
         // Criar uma instância de SuporteTarefa com a relação injetada
-        $suporteTarefa = new SuporteTarefa($suporteTarefaStatusMock);
+        $suporteTarefa = new SuporteTarefa(['status' => $suporteTarefaStatusMock]);
 
         // Chamar o método status
         $result = $suporteTarefa->status();
@@ -27,7 +27,7 @@ class SuporteTarefaTest extends TestCase
         $userMock = $this->createMock(User::class);
 
         // Criar uma instância de SuporteTarefa com a relação injetada
-        $suporteTarefa = new SuporteTarefa(null, $userMock);
+        $suporteTarefa = new SuporteTarefa(['user' => $userMock]);
 
         // Chamar o método usuario
         $result = $suporteTarefa->usuario();
