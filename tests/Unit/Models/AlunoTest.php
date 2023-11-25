@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
+use Illuminate\Events\Dispatcher;
 
 class AlunoTest extends TestCase
 {
@@ -17,10 +18,17 @@ class AlunoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        // Create a mock Container instance
+        $container = $this->getMockBuilder('Illuminate\Contracts\Container\Container')
+            ->getMock();
+
+        // Set up a mock event dispatcher
+        $dispatcher = new Dispatcher($container);
+
         // Set the mocked connection on the Aluno model
         Aluno::setConnectionResolver($resolver = new \Illuminate\Database\ConnectionResolver);
         $resolver->addConnection('default', $connection);
-        Aluno::setEventDispatcher(new \Illuminate\Events\Dispatcher($resolver));
+        Aluno::setEventDispatcher($dispatcher);
 
         // Manually create an Aluno instance
         $aluno = new Aluno([
