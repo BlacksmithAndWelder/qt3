@@ -8,7 +8,7 @@ use App\Models\Aluno;
 use App\Models\Turma;
 use App\Http\Requests\Aluno\Request as AlunoRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\View\Factory as ViewFactory;
 
 class AlunoControllerTest extends TestCase
 {
