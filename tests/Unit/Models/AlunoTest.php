@@ -4,34 +4,43 @@ use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
 use Illuminate\Container\Container;
-use Illuminate\Database\ConnectionResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AlunoTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Set up the Eloquent model with a simple factory
+        Model::setConnectionResolver(
+            $resolver = new \Illuminate\Database\ConnectionResolver
+        );
+
+        $resolver->addConnection('default', $this->createMock('Illuminate\Database\Connection'));
+
+        Model::setEventDispatcher(
+            new \Illuminate\Events\Dispatcher($resolver)
+        );
+
+        // Ensure the Aluno model has the HasFactory trait
+        if (!in_array(HasFactory::class, class_uses_recursive(Aluno::class))) {
+            Aluno::addTrait(HasFactory::class);
+        }
+
+        // Manually register the factory
+        $this->app = Container::getInstance();
+        $this->app->instance(
+            Factory::class,
+            new Factory($this->app->make('Illuminate\Database\Eloquent\Factory'))
+        );
+    }
+
     public function testTurmaMethodReturnsTurmaModel()
     {
-        // Mock the Eloquent builder and connection
-        $builder = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $connection = $this->getMockBuilder('Illuminate\Database\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        // Create a mock Container instance
-        $container = new Container();
-
-        // Set up a mock event dispatcher
-        $dispatcher = new Dispatcher($container);
-
-        // Set up the Eloquent model with the mocked connection
-        $resolver = new ConnectionResolver(['default' => $connection]);
-        Model::setConnectionResolver($resolver);
-
         // Manually create an Aluno instance with valid data
         $alunoData = [
             'nome' => 'João',
@@ -41,7 +50,7 @@ class AlunoTest extends TestCase
             'turma_id' => 1,
         ];
 
-        $aluno = new Aluno($alunoData);
+        $aluno = Aluno::factory()->make($alunoData);
 
         // Print some debug information
         var_dump($alunoData); // Output 1
