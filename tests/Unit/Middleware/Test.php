@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
 
-class AlunoTest extends TestCase
+class AlunoFTurmaTest extends TestCase
 {
     public function testTurmaRelationship()
     {
