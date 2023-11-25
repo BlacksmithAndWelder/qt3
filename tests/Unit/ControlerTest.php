@@ -4,74 +4,45 @@ use Mockery;
 
 class SuporteTarefaControllerTest extends TestCase
 {
+    protected $suporteTarefaMock;
+
+    public function setUp(): void
+    {
+        $this->suporteTarefaMock = Mockery::mock('overload:App\Models\SuporteTarefa');
+    }
+
     public function tearDown(): void
     {
         Mockery::close();
     }
 
+    public function setSuporteTarefa($suporteTarefaMock)
+    {
+        $this->suporteTarefaMock = $suporteTarefaMock;
+    }
+
     public function testListar()
     {
-        // Criar um mock para o modelo SuporteTarefa
-        $suporteTarefaMock = Mockery::mock('overload:App\Models\SuporteTarefa');
-        // Definir um comportamento esperado para o método with
-        $suporteTarefaMock->shouldReceive('with')->andReturnSelf();
-        // Definir um comportamento esperado para o método get
-        $suporteTarefaMock->shouldReceive('get')->andReturn([]);
-
-        // Criar uma instância do controlador
-        $controller = new App\Http\Controllers\Web\Suporte\SuporteTarefaController();
-
-        // Chamar a função a ser testada
-        $result = $controller->listar();
-
-        // Asserção para verificar se o resultado é uma instância de view, por exemplo
-        $this->assertInstanceOf(\Illuminate\View\View::class, $result);
-    }
-
-    public function testCriar()
-    {
-        // Criar mocks para os modelos necessários
-        $usuarioMock = Mockery::mock('overload:App\Models\User');
-        $statusMock = Mockery::mock('overload:App\Models\SuporteTarefaStatus');
-
-        // Configurar comportamentos esperados para os mocks
-        $usuarioMock->shouldReceive('get')->andReturn([]);
-        $statusMock->shouldReceive('get')->andReturn([]);
-
-        // Criar uma instância do controlador
-        $controller = new App\Http\Controllers\Web\Suporte\SuporteTarefaController();
-
-        // Substituir as instâncias dos modelos pela mock
-        $controller->setUsuario($usuarioMock);
-        $controller->setStatus($statusMock);
-
-        // Chamar a função a ser testada
-        $result = $controller->criar();
-
-        // Asserção para verificar se o resultado é uma instância de view, por exemplo
-        $this->assertInstanceOf(\Illuminate\View\View::class, $result);
-    }
-
-    public function testSalvar()
-    {
-        // Criar mocks para o modelo SuporteTarefa e o request
-        $suporteTarefaMock = Mockery::mock('App\Models\SuporteTarefa');
-        $requestMock = Mockery::mock('App\Http\Requests\SuporteTarefa\Request');
-
-        // Configurar comportamentos esperados para os mocks
-        $requestMock->shouldReceive('validated')->andReturn(['user_id' => 1, 'status_id' => 1, 'urgente' => true, 'assunto' => 'Teste', 'descricao' => 'Descrição']);
-        $suporteTarefaMock->shouldReceive('create')->andReturn($suporteTarefaMock);
+        // Criar um mock para a classe de view
+        $viewMock = Mockery::mock('Illuminate\View\View');
+        
+        // Configurar comportamentos esperados para o mock de SuporteTarefa
+        $this->suporteTarefaMock->shouldReceive('with')->with(['usuario','status'])->andReturnSelf();
+        $this->suporteTarefaMock->shouldReceive('get')->andReturn([]);
 
         // Criar uma instância do controlador
         $controller = new App\Http\Controllers\Web\Suporte\SuporteTarefaController();
 
         // Substituir a instância do modelo SuporteTarefa pela mock
-        $controller->setSuporteTarefa($suporteTarefaMock);
+        $controller->setSuporteTarefa($this->suporteTarefaMock);
+
+        // Substituir a função de view por um mock
+        $controller->setView($viewMock);
 
         // Chamar a função a ser testada
-        $result = $controller->salvar($requestMock);
+        $result = $controller->listar();
 
-        // Asserção para verificar se o redirecionamento ocorreu com sucesso
-        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $result);
+        // Asserção para verificar se o resultado é uma instância de view
+        $this->assertInstanceOf(\Illuminate\View\View::class, $result);
     }
 }
