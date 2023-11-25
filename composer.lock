@@ -144,7 +144,8 @@
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.3",
                 "scrutinizer/ocular": "1.6.0",
                 "squizlabs/php_codesniffer": "^3.5",
-                "vimeo/psalm": "^4.0.0"
+                "vimeo/psalm": "^4.0.0",
+                "mockery/mockery": "^1.4"
             },
             "type": "library",
             "extra": {
