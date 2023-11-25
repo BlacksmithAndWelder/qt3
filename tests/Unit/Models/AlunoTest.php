@@ -18,7 +18,7 @@ class AlunoTest extends TestCase
 
         // Criar um mock manual para a classe Turma
         $turmaMock = $this->getMockBuilder(Turma::class)
-            ->disableOriginalConstructor()
+            ->onlyMethods(['find']) // Apenas mockar o método find
             ->getMock();
 
         // Configurar o retorno desejado do método find
