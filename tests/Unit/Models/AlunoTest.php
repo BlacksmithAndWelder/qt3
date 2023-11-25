@@ -39,6 +39,8 @@ class AlunoTest extends TestCase
             'turma_id' => 1,
         ]);
 
+        // Ensure that the properties and methods used in your test are defined in the Aluno model
+
         // Chamar o método turma()
         $result = $aluno->turma();
 
