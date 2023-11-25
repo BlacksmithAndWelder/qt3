@@ -8,7 +8,6 @@ use App\Models\Escola;
 class EscolaTest extends TestCase
 {
     /**
-     * @codeCoverageIgnore
      * A basic test Escola.
      *
      * @return void
