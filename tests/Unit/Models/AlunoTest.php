@@ -1,6 +1,5 @@
 <?php
 
-namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
@@ -31,21 +30,22 @@ class AlunoTest extends TestCase
         $resolver->addConnection('default', $connection);
         Aluno::setEventDispatcher($dispatcher);
 
-        // Manually create an Aluno instance
+        // Manually create an Aluno instance with valid data
         $alunoData = [
             'nome' => 'João',
             'sobrenome' => 'Silva',
-            'idade' => '20',
-            'bolsa_estudos' => 'sim',
-            'turma_id' => '1',
+            'idade' => 20,
+            'bolsa_estudos' => true,
+            'turma_id' => 1,
         ];
-
-        // Print the data being used
-        var_dump($alunoData);
 
         $aluno = new Aluno($alunoData);
 
         // Ensure that the properties and methods used in your test are defined in the Aluno model
+
+        // Print some debug information
+        var_dump($alunoData); // Output 1
+        var_dump($aluno->toArray()); // Output 2
 
         // Chamar o método turma()
         $result = $aluno->turma();
