@@ -4,14 +4,13 @@ use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AlunoTest extends TestCase
 {
     public function testTurmaMethodReturnsHasOneRelation()
     {
-        // Use a Factory do Eloquent para criar instâncias sem interação com o banco de dados
-        $aluno = Aluno::factory()->make([
+        // Manually create an Aluno instance
+        $aluno = new Aluno([
             'nome' => 'João',
             'sobrenome' => 'Silva',
             'idade' => 20,
