@@ -22,8 +22,12 @@ class AlunoTest extends TestCase
 
         $resolver->addConnection('default', $this->createMock('Illuminate\Database\Connection'));
 
+        // Set up a mock Container instance
+        $container = new Container();
+
+        // Set up the Eloquent model event dispatcher with the correct container type
         Model::setEventDispatcher(
-            new \Illuminate\Events\Dispatcher($resolver)
+            new \Illuminate\Events\Dispatcher($container)
         );
 
         // Ensure the Aluno model has the HasFactory trait
