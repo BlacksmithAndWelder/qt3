@@ -13,15 +13,15 @@ class ViewConfigTest extends TestCase
      */
     public function testViewConfigReturnsExpectedArray()
     {
-        // Mocking the include function
+        // Mockando a função include
         $mockedInclude = $this->getMockBuilder('IncludeMock')
             ->setMethods(['include'])
             ->getMock();
 
-        // Set up expectations for the include function
+        // Configurando expectativas para a função include
         $mockedInclude->expects($this->once())
             ->method('include')
-            ->with(__DIR__ . '/../path/to/your/config/views.php')
+            ->with($this->equalTo(__DIR__ . '/../path/to/your/config/views.php'))
             ->willReturn([
                 'paths' => [
                     resource_path('views'),
@@ -29,13 +29,13 @@ class ViewConfigTest extends TestCase
                 'compiled' => realpath(storage_path('framework/views')),
             ]);
 
-        // Replace the real include function with our mock
-        $this->mockFunction('include', $mockedInclude);
+        // Substituindo a função include real pelo nosso mock
+        $this->setIncludeFunction($mockedInclude);
 
-        // Call the method or function that includes the file
+        // Chamando o método ou função que inclui o arquivo
         $config = include __DIR__ . '/../path/to/your/config/views.php';
 
-        // Verifying the configuration
+        // Verificando a configuração
         $this->assertIsArray($config);
         $this->assertArrayHasKey('paths', $config);
         $this->assertArrayHasKey('compiled', $config);
@@ -43,19 +43,16 @@ class ViewConfigTest extends TestCase
 
     /**
      * @codeCoverageIgnore
-     * Mock the include function for testing.
+     * Substitui a função include para fins de teste.
      *
-     * @param string $functionName
      * @param object $mock
      */
-    private function mockFunction($functionName, $mock)
+    private function setIncludeFunction($mock)
     {
         $namespace = __NAMESPACE__ . '\\';
 
-        eval("namespace $namespace { function $functionName() { global \$__PHPSHADOWER__INCLUDEMOCK__; return \$__PHPSHADOWER__INCLUDEMOCK__->$functionName(...func_get_args()); } }");
+        eval("namespace $namespace { function include() { global \$__PHPSHADOWER__INCLUDEMOCK__; return \$__PHPSHADOWER__INCLUDEMOCK__->include(...func_get_args()); } }");
 
         $GLOBALS['__PHPSHADOWER__INCLUDEMOCK__'] = $mock;
     }
-}
-
 }
