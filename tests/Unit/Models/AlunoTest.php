@@ -3,6 +3,10 @@
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
+use Illuminate\Container\Container;
+use Illuminate\Database\ConnectionResolver;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Events\Dispatcher;
 
 class AlunoTest extends TestCase
@@ -10,7 +14,7 @@ class AlunoTest extends TestCase
     public function testTurmaMethodReturnsTurmaModel()
     {
         // Mock the Eloquent builder and connection
-        $builder = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
+        $builder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -19,11 +23,14 @@ class AlunoTest extends TestCase
             ->getMock();
 
         // Create a mock Container instance
-        $container = $this->getMockBuilder('Illuminate\Contracts\Container\Container')
-            ->getMock();
+        $container = new Container();
 
         // Set up a mock event dispatcher
         $dispatcher = new Dispatcher($container);
+
+        // Set up the Eloquent model with the mocked connection
+        $resolver = new ConnectionResolver(['default' => $connection]);
+        Model::setConnectionResolver($resolver);
 
         // Manually create an Aluno instance with valid data
         $alunoData = [
@@ -35,10 +42,6 @@ class AlunoTest extends TestCase
         ];
 
         $aluno = new Aluno($alunoData);
-
-        // Set the mocked connection directly on the Aluno model
-        $aluno->setConnectionResolver($resolver = new \Illuminate\Database\ConnectionResolver);
-        $resolver->addConnection('default', $connection);
 
         // Print some debug information
         var_dump($alunoData); // Output 1
