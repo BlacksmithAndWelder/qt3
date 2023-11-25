@@ -1,4 +1,6 @@
 <?php
+<?php
+
 use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Http\Requests\SuporteTarefa\Request as SuporteTarefaRequest;
@@ -30,6 +32,7 @@ class SuporteTarefaControllerTest extends TestCase
         // Mock para Eloquent Builder
         $eloquentBuilderMock = $this->getMockBuilder(\Illuminate\Database\Eloquent\Builder::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getModel', 'getConnection', 'newQuery'])  // Include 'getConnection' in the setMethods
             ->getMock();
 
         // Configuração do mock para o método 'make' da ViewFactory
@@ -48,9 +51,9 @@ class SuporteTarefaControllerTest extends TestCase
             ->method('getModel')
             ->willReturn(new SuporteTarefa);
 
-        //$eloquentBuilderMock->expects($this->any())
-         //   ->method('getConnection')
-         //   ->willReturnSelf();
+        $eloquentBuilderMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturnSelf();
 
         $suporteTarefaMock->expects($this->any())
             ->method('newQuery')
