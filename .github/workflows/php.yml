@@ -30,11 +30,10 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: mocky
-      run: composer require --dev mockery/mockery
-
+      run: |
+         composer install --prefer-dist --no-progress
+         composer require mockery/mockery --dev
+   
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
