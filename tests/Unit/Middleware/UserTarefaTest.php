@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 use App\Models\User;
 use App\Models\SuporteTarefa;
 
-class UserTest extends TestCase
+class UserTarefaTest extends TestCase
 {
     public function testSuporteTarefasRelationship()
     {
