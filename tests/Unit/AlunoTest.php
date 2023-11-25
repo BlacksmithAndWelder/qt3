@@ -12,7 +12,7 @@ class AlunoTest extends TestCase
     public function testTurmaMethodReturnsHasOneRelation()
     {
         // Use a Factory do Eloquent para criar instâncias sem interação com o banco de dados
-        $aluno = Factory::make(Aluno::class, [
+        $aluno = Aluno::factory()->make([
             'nome' => 'João',
             'sobrenome' => 'Silva',
             'idade' => 20,
