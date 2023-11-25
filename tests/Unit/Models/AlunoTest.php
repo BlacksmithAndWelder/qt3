@@ -1,10 +1,8 @@
 <?php
-
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
 use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -34,13 +32,6 @@ class AlunoTest extends TestCase
         if (!in_array(HasFactory::class, class_uses_recursive(Aluno::class))) {
             Aluno::addTrait(HasFactory::class);
         }
-
-        // Manually register the factory
-        $this->app = Container::getInstance();
-        $this->app->instance(
-            Factory::class,
-            new Factory($this->app->make('Illuminate\Database\Eloquent\Factory'))
-        );
     }
 
     public function testTurmaMethodReturnsTurmaModel()
