@@ -1,37 +1,35 @@
 <?php
-use Illuminate\Http\Request;
-use App\Http\Middleware\Authenticate;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Contracts\Routing\UrlGenerator;
+use PHPUnit\Framework\TestCase;
+use App\Models\Aluno;
+use App\Models\Turma;
 
-class AuthenticateMiddlewareTest extends \PHPUnit\Framework\TestCase
+class AlunoTest extends TestCase
 {
-    public function testRedirectsToLoginWhenNotAuthenticated()
+    public function testTurmaRelationship()
     {
-        // Create a mock for the UrlGenerator interface
-        $urlGeneratorMock = $this->createMock(UrlGenerator::class);
-        // Define the expected route('login') call and its return value
-        $urlGeneratorMock->expects($this->once())
-            ->method('route')
-            ->with('login')
-            ->willReturn('/login');
+        // Create a mock of the Turma model
+        $turmaMock = $this->createMock(Turma::class);
 
-        // Bind the mocked UrlGenerator to the IoC container so it's used by the middleware
-        app()->instance(UrlGenerator::class, $urlGeneratorMock);
+        // Create a mock of the Aluno model and set up the expectations for the hasOne relationship
+        $alunoMock = $this->getMockBuilder(Aluno::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['hasOne'])
+            ->getMock();
 
-        // Create a request that does not expect JSON
-        $request = Request::create('/some-url');
+        // Expect the hasOne method to be called with specific arguments and return the Turma mock
+        $alunoMock->expects($this->once())
+            ->method('hasOne')
+            ->with(
+                $this->equalTo(Turma::class),
+                $this->equalTo('id'),
+                $this->equalTo('turma_id')
+            )
+            ->willReturn($turmaMock);
 
-        // Create an instance of the Authenticate middleware
-        $middleware = new Authenticate();
+        // Call the turma method on the Aluno model
+        $result = $alunoMock->turma();
 
-        // Call the redirectTo method with the request
-        $redirectPath = $middleware->redirectTo($request);
-
-        // Assert that the redirect path is the expected login route
-        $this->assertEquals('/login', $redirectPath);
+        // Assert that the result is an instance of Turma
+        $this->assertInstanceOf(Turma::class, $result);
     }
-
-    // You can add more test cases as needed
 }
