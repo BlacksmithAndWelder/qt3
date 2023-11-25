@@ -5,13 +5,11 @@ use App\Http\Requests\SuporteTarefa\Request as SuporteTarefaRequest;
 use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User as Usuario;
-use Illuminate\Contracts\View\Factory as ViewFactory; // Importar a interface ViewFactory
-use Illuminate\View\View; // Importar a classe View
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\View\View;
 
 class SuporteTarefaControllerTest extends TestCase
 {
-    // ... Teste anterior
-
     public function testCriarMethod()
     {
         // Mock para SuporteTarefa
@@ -29,44 +27,25 @@ class SuporteTarefaControllerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Mock para o contêiner de serviço
-        $containerMock = $this->getMockBuilder(\Illuminate\Container\Container::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        // Cria uma instância real da classe SuporteTarefaController
+        $controller = new SuporteTarefaController();
 
-        // Mock para a classe ViewFactory
+        // Cria um mock para a ViewFactory
         $viewFactoryMock = $this->createMock(ViewFactory::class);
 
+        // Modifica manualmente o contêiner de serviço da classe
+        $container = $controller->getContainer();
+        $container->instance(ViewFactory::class, $viewFactoryMock);
+
         // Configuração do mock para o método 'make'
-        $containerMock->expects($this->once())
+        $viewFactoryMock->expects($this->once())
             ->method('make')
-            ->with(ViewFactory::class) // Espera uma chamada com a classe ViewFactory
-            ->willReturn($viewFactoryMock); // Retorna o mock de ViewFactory
-
-        // Mock para o controlador, passando o contêiner de serviço modificado
-        $controller = $this->getMockBuilder(SuporteTarefaController::class)
-            ->setConstructorArgs([$containerMock]) // Injeta o contêiner de serviço modificado
-            ->setMethods(['criar'])
-            ->getMock();
-
-        // Configuração do mock para o método 'criar'
-        $controller->expects($this->once())
-            ->method('criar')
-            ->willReturnCallback(function () use ($suporteTarefaMock, $listaUsuariosMock, $listaSuporteTarefaStatusMock, $viewFactoryMock) {
-                // Use o mock de ViewFactory para criar uma instância da View
-                $view = $this->createMock(View::class);
-
-                $viewFactoryMock->expects($this->once())
-                    ->method('make')
-                    ->with('suporte-tarefa.criar', [
-                        'SuporteTarefa' => $suporteTarefaMock,
-                        'ListaUsuarios' => $listaUsuariosMock,
-                        'ListaSuporteTarefaStatus' => $listaSuporteTarefaStatusMock,
-                    ])
-                    ->willReturn($view);
-
-                return $view;
-            });
+            ->with('suporte-tarefa.criar', [
+                'SuporteTarefa' => $suporteTarefaMock,
+                'ListaUsuarios' => $listaUsuariosMock,
+                'ListaSuporteTarefaStatus' => $listaSuporteTarefaStatusMock,
+            ])
+            ->willReturn($this->createMock(View::class));
 
         // Executa o teste
         $response = $controller->criar();
