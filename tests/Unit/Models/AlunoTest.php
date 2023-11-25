@@ -25,11 +25,6 @@ class AlunoTest extends TestCase
         // Set up a mock event dispatcher
         $dispatcher = new Dispatcher($container);
 
-        // Set the mocked connection on the Aluno model
-        Aluno::setConnectionResolver($resolver = new \Illuminate\Database\ConnectionResolver);
-        $resolver->addConnection('default', $connection);
-        Aluno::setEventDispatcher($dispatcher);
-
         // Manually create an Aluno instance with valid data
         $alunoData = [
             'nome' => 'João',
@@ -41,7 +36,9 @@ class AlunoTest extends TestCase
 
         $aluno = new Aluno($alunoData);
 
-        // Ensure that the properties and methods used in your test are defined in the Aluno model
+        // Set the mocked connection directly on the Aluno model
+        $aluno->setConnectionResolver($resolver = new \Illuminate\Database\ConnectionResolver);
+        $resolver->addConnection('default', $connection);
 
         // Print some debug information
         var_dump($alunoData); // Output 1
