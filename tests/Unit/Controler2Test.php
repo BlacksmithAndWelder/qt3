@@ -1,81 +1,58 @@
 <?php
 
 namespace Tests\Unit;
-use Tests\Unit\Web\Suporte\SuporteTarefaControllerTest;
+use PHPUnit\Framework\TestCase;
+use Mockery;
 
-class SuporteTarefaControllerTest extends SuporteTarefaControllerTest
+class SuporteTarefaControllerTest extends TestCase
 {
-    // ... (códigos anteriores)
-
-    public function testSalvarCriaNovaSuporteTarefaNoBancoDeDados()
+    public function tearDown(): void
     {
-        // Crie instâncias mock para as classes SuporteTarefa, SuporteTarefaRequest, SuporteTarefaStatus e User
-        $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
-        $suporteTarefaRequestMock = Mockery::mock(SuporteTarefaRequest::class);
-        $suporteTarefaStatusMock = Mockery::mock(SuporteTarefaStatus::class);
-        $userMock = Mockery::mock(User::class);
-
-        // Defina as expectativas para as instâncias mock
-        $suporteTarefaMock->shouldReceive('create')->andReturnSelf();
-
-        // Crie uma instância do controlador com as instâncias mock
-        $controller = new SuporteTarefaController($suporteTarefaMock, $suporteTarefaStatusMock, $userMock);
-
-        // Execute a função 'salvar'
-        $response = $controller->salvar($suporteTarefaRequestMock);
-
-        // Verifique se a nova SuporteTarefa foi criada no banco de dados
-        $this->assertDatabaseHas('suporte_tarefas', [
-            // Adicione mais verificações conforme necessário
-        ]);
+        Mockery::close();
     }
 
-    public function testEditarAtualizaSuporteTarefaNoBancoDeDados()
+    public function testCriar()
     {
-        // Crie instâncias mock para as classes SuporteTarefa, SuporteTarefaStatus e User
-        $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
-        $suporteTarefaStatusMock = Mockery::mock(SuporteTarefaStatus::class);
-        $userMock = Mockery::mock(User::class);
+        // Criar mocks para os modelos necessários
+        $usuarioMock = Mockery::mock('overload:App\Models\User');
+        $statusMock = Mockery::mock('overload:App\Models\SuporteTarefaStatus');
 
-        // Crie e salve uma SuporteTarefa de exemplo no banco de dados
-        $suporteTarefa = $suporteTarefaMock->create();
+        // Configurar comportamentos esperados para os mocks
+        $usuarioMock->shouldReceive('get')->andReturn([]);
+        $statusMock->shouldReceive('get')->andReturn([]);
 
-        // Defina as expectativas para as instâncias mock
-        $suporteTarefaMock->shouldReceive('find')->andReturn($suporteTarefa);
-        $suporteTarefaStatusMock->shouldReceive('get')->andReturn(collect([]));
+        // Criar uma instância do controlador
+        $controller = new App\Http\Controllers\Web\Suporte\SuporteTarefaController();
 
-        // Crie uma instância do controlador com as instâncias mock
-        $controller = new SuporteTarefaController($suporteTarefaMock, $suporteTarefaStatusMock, $userMock);
+        // Chamar a função a ser testada
+        $result = $controller->criar();
 
-        // Execute a função 'editar'
-        $response = $controller->editar($suporteTarefa->id);
-
-        // Verifique se a SuporteTarefa foi atualizada no banco de dados
-        $this->assertDatabaseHas('suporte_tarefas', [
-            'id' => $suporteTarefa->id,
-            // Adicione mais verificações conforme necessário
-        ]);
+        // Asserção para verificar se o resultado é uma instância de view, por exemplo
+        $this->assertInstanceOf(\Illuminate\View\View::class, $result);
     }
 
-    public function testExcluirRemoveSuporteTarefaDoBancoDeDados()
+    public function testSalvar()
     {
-        // Crie instâncias mock para as classes SuporteTarefa, SuporteTarefaStatus e User
-        $suporteTarefaMock = Mockery::mock(SuporteTarefa::class);
-        $suporteTarefaStatusMock = Mockery::mock(SuporteTarefaStatus::class);
-        $userMock = Mockery::mock(User::class);
+        // Criar mocks para o modelo SuporteTarefa e o request
+        $suporteTarefaMock = Mockery::mock('App\Models\SuporteTarefa');
+        $requestMock = Mockery::mock('App\Http\Requests\SuporteTarefa\Request');
 
-        // Crie e salve uma SuporteTarefa de exemplo no banco de dados
-        $suporteTarefa = $suporteTarefaMock->create();
+        // Configurar comportamentos esperados para os mocks
+        $requestMock->shouldReceive('validated')->andReturn(['user_id' => 1, 'status_id' => 1, 'urgente' => true, 'assunto' => 'Teste', 'descricao' => 'Descrição']);
 
-        // Crie uma instância do controlador com as instâncias mock
-        $controller = new SuporteTarefaController($suporteTarefaMock, $suporteTarefaStatusMock, $userMock);
+        // Criar uma instância do controlador
+        $controller = new App\Http\Controllers\Web\Suporte\SuporteTarefaController();
 
-        // Execute a função 'excluir'
-        $response = $controller->excluir($suporteTarefa->id);
+        // Substituir a instância do modelo SuporteTarefa pela mock
+        $controller->setSuporteTarefa($suporteTarefaMock);
 
-        // Verifique se a SuporteTarefa foi removida do banco de dados
-        $this->assertDatabaseMissing('suporte_tarefas', ['id' => $suporteTarefa->id]);
+        // Chamar a função a ser testada
+        $result = $controller->salvar($requestMock);
+
+        // Asserção para verificar se o redirecionamento ocorreu com sucesso
+        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $result);
     }
 
-    // ... (função utilitária getValidSuporteTarefaRequest)
+    // Adicione testes para as outras funções conforme necessário
 }
+
