@@ -1,13 +1,23 @@
 <?php
 
 namespace Tests\Unit;
+namespace Tests\Unit;
+
 use PHPUnit\Framework\TestCase;
 
-/**
- * @codeCoverageIgnore
- */
+trait ResourcePathTrait
+{
+    public function resourcePath($path)
+    {
+        // Implemente a lógica para resolver o caminho do recurso
+        return '/caminho/do/recurso/' . $path;
+    }
+}
+
 class ViewConfigTest extends TestCase
 {
+    use ResourcePathTrait;
+
     /**
      * @codeCoverageIgnore
      */
@@ -21,19 +31,19 @@ class ViewConfigTest extends TestCase
         // Configurando expectativas para a função include
         $mockedInclude->expects($this->once())
             ->method('include')
-            ->with($this->equalTo(__DIR__ . '/../path/to/your/config/views.php'))
+            ->with($this->equalTo($this->resourcePath('../path/to/your/config/views.php')))
             ->willReturn([
                 'paths' => [
-                    resource_path('views'),
+                    $this->resourcePath('views'),
                 ],
-                'compiled' => realpath(storage_path('framework/views')),
+                'compiled' => realpath($this->resourcePath('framework/views')),
             ]);
 
         // Substituindo a função include real pelo nosso mock
         $this->setIncludeFunction($mockedInclude);
 
         // Chamando o método ou função que inclui o arquivo
-        $config = include __DIR__ . '/../path/to/your/config/views.php';
+        $config = include $this->resourcePath('../path/to/your/config/views.php');
 
         // Verificando a configuração
         $this->assertIsArray($config);
