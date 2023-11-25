@@ -12,17 +12,32 @@ class UserTest extends TestCase
     public function test_check_if_user_columns_are_correct()
     {
         $user = new User;
-        $expected = [
+
+        // Atributos fillable
+        $fillableExpected = [
             'name',
             'email',
             'password',
-            'email_verified_at',
+        ];
+
+        $fillableCompared = array_diff($fillableExpected, $user->getFillable());
+        $this->assertCount(0, $fillableCompared, 'Algumas colunas fillable não correspondem às expectativas.');
+
+        // Atributos hidden
+        $hiddenExpected = [
+            'password',
             'remember_token',
         ];
 
-        $arrayCompared = array_diff($expected, $user->getFillable());
+        $hiddenCompared = array_diff($hiddenExpected, $user->getHidden());
+        $this->assertCount(0, $hiddenCompared, 'Algumas colunas hidden não correspondem às expectativas.');
 
-        // Usar assertCount para verificar se o número de elementos no array diff é zero
-        $this->assertCount(0, $arrayCompared, 'Algumas colunas não correspondem às expectativas.');
+        // Atributos casts
+        $castsExpected = [
+            'email_verified_at' => 'datetime',
+        ];
+
+        $castsCompared = array_diff_assoc($castsExpected, $user->getCasts());
+        $this->assertCount(0, $castsCompared, 'Algumas colunas casts não correspondem às expectativas.');
     }
 }
