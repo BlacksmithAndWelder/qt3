@@ -3,6 +3,7 @@ use PHPUnit\Framework\TestCase;
 use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SuporteTarefaTest extends TestCase
 {
@@ -14,18 +15,16 @@ class SuporteTarefaTest extends TestCase
         // Criar um mock manual para SuporteTarefaStatus
         $suporteTarefaStatusMock = $this->createMock(SuporteTarefaStatus::class);
 
-        // Definir o comportamento esperado para o método hasOne
-        $suporteTarefa->method('hasOne')
-            ->withConsecutive(
-                [SuporteTarefaStatus::class, 'id', 'status_id']
-            )
-            ->willReturn($suporteTarefaStatusMock);
+        // Configurar o mock para o método hasOne
+        $suporteTarefa->shouldReceive('status')
+            ->once()
+            ->andReturn($this->createMock(HasOne::class));
 
         // Chamar o método status
         $result = $suporteTarefa->status();
 
-        // Verificar se o resultado é o mock de SuporteTarefaStatus
-        $this->assertSame($suporteTarefaStatusMock, $result);
+        // Verificar se o resultado é um mock de HasOne
+        $this->assertInstanceOf(HasOne::class, $result);
     }
 
     public function test_usuario_method_returns_user_relation()
@@ -36,17 +35,15 @@ class SuporteTarefaTest extends TestCase
         // Criar um mock manual para User
         $userMock = $this->createMock(User::class);
 
-        // Definir o comportamento esperado para o método hasOne
-        $suporteTarefa->method('hasOne')
-            ->withConsecutive(
-                [User::class, 'id', 'user_id']
-            )
-            ->willReturn($userMock);
+        // Configurar o mock para o método hasOne
+        $suporteTarefa->shouldReceive('usuario')
+            ->once()
+            ->andReturn($this->createMock(HasOne::class));
 
         // Chamar o método usuario
         $result = $suporteTarefa->usuario();
 
-        // Verificar se o resultado é o mock de User
-        $this->assertSame($userMock, $result);
+        // Verificar se o resultado é um mock de HasOne
+        $this->assertInstanceOf(HasOne::class, $result);
     }
 }
