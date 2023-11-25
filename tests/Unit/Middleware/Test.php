@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +18,7 @@ class AuthenticateMiddlewareTest extends \PHPUnit\Framework\TestCase
             ->willReturn('/login');
 
         // Bind the mocked UrlGenerator to the IoC container so it's used by the middleware
-        $this->app->instance(UrlGenerator::class, $urlGeneratorMock);
+        app()->instance(UrlGenerator::class, $urlGeneratorMock);
 
         // Create a request that does not expect JSON
         $request = Request::create('/some-url');
