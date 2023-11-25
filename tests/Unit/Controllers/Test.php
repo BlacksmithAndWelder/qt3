@@ -48,9 +48,9 @@ class SuporteTarefaControllerTest extends TestCase
             ->method('getModel')
             ->willReturn(new SuporteTarefa);
 
-        $eloquentBuilderMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturnSelf();
+        //$eloquentBuilderMock->expects($this->any())
+         //   ->method('getConnection')
+         //   ->willReturnSelf();
 
         $suporteTarefaMock->expects($this->any())
             ->method('newQuery')
