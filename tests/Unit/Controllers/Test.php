@@ -27,16 +27,13 @@ class SuporteTarefaControllerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Cria uma instância real da classe SuporteTarefaController
-        $controller = new SuporteTarefaController();
+        // Mock para Eloquent Builder
+        $eloquentBuilderMock = $this->getMockBuilder(\Illuminate\Database\Eloquent\Builder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        // Cria um mock para a ViewFactory
+        // Configuração do mock para o método 'make' da ViewFactory
         $viewFactoryMock = $this->createMock(ViewFactory::class);
-
-        // Modifica manualmente o contêiner de serviço da classe
-        $controller->viewFactory = $viewFactoryMock;
-
-        // Configuração do mock para o método 'make'
         $viewFactoryMock->expects($this->once())
             ->method('make')
             ->with('suporte-tarefa.criar', [
@@ -45,6 +42,25 @@ class SuporteTarefaControllerTest extends TestCase
                 'ListaSuporteTarefaStatus' => $listaSuporteTarefaStatusMock,
             ])
             ->willReturn($this->createMock(View::class));
+
+        // Configuração do mock para a conexão Eloquent
+        $eloquentBuilderMock->expects($this->any())
+            ->method('getModel')
+            ->willReturn(new SuporteTarefa);
+
+        $eloquentBuilderMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturnSelf();
+
+        $suporteTarefaMock->expects($this->any())
+            ->method('newQuery')
+            ->willReturn($eloquentBuilderMock);
+
+        // Cria uma instância real da classe SuporteTarefaController
+        $controller = new SuporteTarefaController();
+
+        // Modifica manualmente o contêiner de serviço da classe
+        $controller->viewFactory = $viewFactoryMock;
 
         // Executa o teste
         $response = $controller->criar();
