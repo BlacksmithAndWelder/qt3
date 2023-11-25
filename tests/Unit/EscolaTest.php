@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use App\Models\Escola;
 
-
 class EscolaTest extends TestCase
 {
     /**
