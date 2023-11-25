@@ -22,6 +22,7 @@ class UserTest extends TestCase
 
         $arrayCompared = array_diff($expected, $user->getFillable());
 
-        $this->assertEquals(0, count($arrayCompared));
+        // Usar assertEmpty para verificar se o array diff é vazio
+        $this->assertEmpty($arrayCompared, 'Algumas colunas não correspondem às expectativas.');
     }
 }
