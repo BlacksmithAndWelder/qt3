@@ -34,8 +34,7 @@ class SuporteTarefaControllerTest extends TestCase
         $viewFactoryMock = $this->createMock(ViewFactory::class);
 
         // Modifica manualmente o contêiner de serviço da classe
-        $container = $controller->getContainer();
-        $container->instance(ViewFactory::class, $viewFactoryMock);
+        $controller->viewFactory = $viewFactoryMock;
 
         // Configuração do mock para o método 'make'
         $viewFactoryMock->expects($this->once())
