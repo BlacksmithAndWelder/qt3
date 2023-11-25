@@ -8,13 +8,15 @@ use App\Models\Escola;
 class EscolaTest extends TestCase
 {
     /**
-     * A basic test Escola.
+     * Verifica se as colunas do modelo Escola estão corretas.
      *
      * @return void
      */
-   public function test_check_if_school_column_is_correct(){
+    public function test_check_if_school_columns_are_correct()
+    {
         $escola = new Escola;
-        $expected = [
+
+        $expectedColumns = [
             'nome',
             'segmento',
             'endereco',
@@ -22,9 +24,23 @@ class EscolaTest extends TestCase
             'max_alunos'
         ];
 
-        $arrayCompared = array_diff($expected, $escola->getFillable());
-       
-        return $this->assertEquals(0, count($arrayCompared));
+        $fillableColumns = $escola->getFillable();
+
+        // Verificar se todos os campos esperados estão no fillable
+        foreach ($expectedColumns as $column) {
+            $this->assertContains(
+                $column,
+                $fillableColumns,
+                "A coluna '$column' está ausente de fillable."
+            );
+        }
+
+        // Verificar se não há campos extras em fillable
+        $extraColumns = array_diff($fillableColumns, $expectedColumns);
+        $this->assertEmpty(
+            $extraColumns,
+            "Campos extras em fillable: " . implode(', ', $extraColumns)
+        );
     }
 }
 
