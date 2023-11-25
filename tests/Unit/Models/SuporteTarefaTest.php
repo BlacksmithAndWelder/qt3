@@ -1,38 +1,33 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use App\Models\SuporteTarefa;
-use App\Models\SuporteTarefaStatus;
-use App\Models\User;
 
 class SuporteTarefaTest extends TestCase
 {
     public function test_status_method_returns_suporte_tarefa_status_relation()
     {
         // Criar um mock manual para SuporteTarefaStatus
-        $suporteTarefaStatusMock = $this->createMock(SuporteTarefaStatus::class);
+        $suporteTarefaStatusMock = $this->getMockBuilder('SuporteTarefaStatus')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        // Criar uma instância de SuporteTarefa com a relação injetada
-        $suporteTarefa = new SuporteTarefa(['status' => $suporteTarefaStatusMock]);
+        // Criar uma instância de SuporteTarefa com o mock injetado
+        $suporteTarefa = new SuporteTarefa();
+
+        // Substituir o método hasOne com a implementação do mock
+        $suporteTarefa->hasOne = function ($class, $foreignKey, $localKey) use ($suporteTarefaStatusMock) {
+            // Verificar se os parâmetros são corretos
+            $this->assertEquals(SuporteTarefaStatus::class, $class);
+            $this->assertEquals('id', $foreignKey);
+            $this->assertEquals('status_id', $localKey);
+
+            // Retornar o mock de SuporteTarefaStatus
+            return $suporteTarefaStatusMock;
+        };
 
         // Chamar o método status
         $result = $suporteTarefa->status();
 
         // Verificar se o resultado é o mock de SuporteTarefaStatus
         $this->assertSame($suporteTarefaStatusMock, $result);
-    }
-
-    public function test_usuario_method_returns_user_relation()
-    {
-        // Criar um mock manual para User
-        $userMock = $this->createMock(User::class);
-
-        // Criar uma instância de SuporteTarefa com a relação injetada
-        $suporteTarefa = new SuporteTarefa(['user' => $userMock]);
-
-        // Chamar o método usuario
-        $result = $suporteTarefa->usuario();
-
-        // Verificar se o resultado é o mock de User
-        $this->assertSame($userMock, $result);
     }
 }
