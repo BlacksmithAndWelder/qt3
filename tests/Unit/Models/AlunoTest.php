@@ -8,6 +8,20 @@ class AlunoTest extends TestCase
 {
     public function testTurmaMethodReturnsTurmaModel()
     {
+        // Mock the Eloquent builder and connection
+        $builder = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $connection = $this->getMockBuilder('Illuminate\Database\Connection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Set the mocked connection on the Aluno model
+        Aluno::setConnectionResolver($resolver = new \Illuminate\Database\ConnectionResolver);
+        $resolver->addConnection('default', $connection);
+        Aluno::setEventDispatcher(new \Illuminate\Events\Dispatcher($resolver));
+
         // Manually create an Aluno instance
         $aluno = new Aluno([
             'nome' => 'João',
