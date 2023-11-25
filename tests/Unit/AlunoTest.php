@@ -1,6 +1,5 @@
 <?php
 
-namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
 use App\Models\Turma;
@@ -20,10 +19,16 @@ class AlunoTest extends TestCase
             'turma_id' => 1,
         ]);
 
-        // Restante do teste permanece inalterado
+        // Chamar o método turma()
         $result = $aluno->turma();
+
+        // Verificar se o resultado é uma instância de HasOne (relacionamento Eloquent)
         $this->assertInstanceOf(HasOne::class, $result);
+        
+        // Verificar se o modelo de destino é a classe Turma
         $this->assertInstanceOf(Turma::class, $result->getRelated());
+        
+        // Verificar se as chaves estrangeira e local estão corretas
         $this->assertEquals('turma_id', $result->getForeignKeyName());
         $this->assertEquals('id', $result->getLocalKeyName());
     }
