@@ -6,8 +6,8 @@ use App\Models\Turma;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\FactoryBuilder;
 
 class AlunoTest extends TestCase
 {
@@ -35,11 +35,11 @@ class AlunoTest extends TestCase
             Aluno::addTrait(HasFactory::class);
         }
 
-        // Manually register the factory
+        // Manually register the factory using FactoryBuilder
         $this->app = Container::getInstance();
         $this->app->instance(
-            Factory::class,
-            new Factory($this->app->make('Illuminate\Database\Eloquent\Factory'))
+            FactoryBuilder::class,
+            new FactoryBuilder($this->app->make('Illuminate\Database\Eloquent\Factory'))
         );
     }
 
