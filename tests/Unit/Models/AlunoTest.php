@@ -7,7 +7,7 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Factories\FactoryBuilder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AlunoTest extends TestCase
 {
@@ -35,11 +35,11 @@ class AlunoTest extends TestCase
             Aluno::addTrait(HasFactory::class);
         }
 
-        // Manually register the factory using FactoryBuilder
+        // Manually register the factory
         $this->app = Container::getInstance();
         $this->app->instance(
-            FactoryBuilder::class,
-            new FactoryBuilder($this->app->make('Illuminate\Database\Eloquent\Factory'))
+            Factory::class,
+            new Factory($this->app->make('Illuminate\Database\Eloquent\Factory'))
         );
     }
 
