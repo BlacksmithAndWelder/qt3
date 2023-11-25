@@ -35,9 +35,9 @@ class AlunoTest extends TestCase
         $alunoData = [
             'nome' => 'João',
             'sobrenome' => 'Silva',
-            'idade' => 20,
-            'bolsa_estudos' => true,
-            'turma_id' => 1,
+            'idade' => '20',
+            'bolsa_estudos' => 'sim',
+            'turma_id' => '1',
         ];
 
         // Print the data being used
