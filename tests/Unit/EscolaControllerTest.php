@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\Escola\EscolaController;
 use App\Http\Requests\Escola\Request as EscolaRequest;
 use App\Models\Escola;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
 
 class EscolaControllerTest extends TestCase
 {
@@ -14,11 +15,12 @@ class EscolaControllerTest extends TestCase
      */
     public function testListar()
     {
-        // Criar uma instância de Escola
-        $escola = Escola::factory()->make();
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+        $escolaMock->shouldReceive('get')->andReturn(collect([]));
 
-        // Substituir a chamada real do método get() pelo método get() simulado
-        Escola::shouldReceive('get')->andReturn(collect([$escola]));
+        // Substitua a instância real do model pelo mock
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se a view é retornada
         $response = $this->get('escola');
@@ -31,8 +33,11 @@ class EscolaControllerTest extends TestCase
      */
     public function testCriar()
     {
-        // Substituir a chamada real do método create() pelo método create() simulado
-        Escola::shouldReceive('create')->andReturn(new Escola);
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+
+        // Substitua a instância real do model pelo mock
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se a view é retornada
         $response = $this->get('escola/criar');
@@ -45,11 +50,19 @@ class EscolaControllerTest extends TestCase
      */
     public function testSalvar()
     {
-        // Substituir a chamada real do método create() pelo método create() simulado
-        Escola::shouldReceive('create')->andReturn(new Escola);
+        // Crie um mock para o request EscolaRequest
+        $requestMock = Mockery::mock(EscolaRequest::class);
+        $requestMock->shouldReceive('validated')->andReturn([]);
+
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+        $escolaMock->shouldReceive('create')->andReturn(new Escola);
+
+        // Substitua as instâncias reais pelos mocks
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se é redirecionado corretamente
-        $response = $this->post('escola', ['nome' => 'Escola Teste']);
+        $response = $this->post('escola', $requestMock->toArray());
         $response->assertRedirect(route('escola.listar'));
     }
 
@@ -58,11 +71,12 @@ class EscolaControllerTest extends TestCase
      */
     public function testEditar()
     {
-        // Criar uma instância de Escola
-        $escola = Escola::factory()->make();
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+        $escolaMock->shouldReceive('find')->andReturn(new Escola);
 
-        // Substituir a chamada real do método find() pelo método find() simulado
-        Escola::shouldReceive('find')->with(1)->andReturn($escola);
+        // Substitua a instância real do model pelo mock
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se a view é retornada
         $response = $this->get('escola/editar/1');
@@ -75,14 +89,19 @@ class EscolaControllerTest extends TestCase
      */
     public function testAtualizar()
     {
-        // Criar uma instância de Escola
-        $escola = Escola::factory()->make();
+        // Crie um mock para o request EscolaRequest
+        $requestMock = Mockery::mock(EscolaRequest::class);
+        $requestMock->shouldReceive('validated')->andReturn([]);
 
-        // Substituir a chamada real do método find() pelo método find() simulado
-        Escola::shouldReceive('find')->with(1)->andReturn($escola);
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+        $escolaMock->shouldReceive('find->update');
+
+        // Substitua as instâncias reais pelos mocks
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se é redirecionado corretamente
-        $response = $this->post('escola/atualizar/1', ['nome' => 'Escola Atualizada']);
+        $response = $this->post('escola/atualizar/1', $requestMock->toArray());
         $response->assertRedirect(route('escola.listar'));
     }
 
@@ -91,18 +110,21 @@ class EscolaControllerTest extends TestCase
      */
     public function testExcluir()
     {
-        // Criar uma instância de Escola
-        $escola = Escola::factory()->make();
+        // Crie um mock para o model Escola
+        $escolaMock = Mockery::mock(Escola::class);
+        $escolaMock->shouldReceive('find->delete');
 
-        // Substituir a chamada real do método find() pelo método find() simulado
-        Escola::shouldReceive('find')->with(1)->andReturn($escola);
-
-        // Substituir a chamada real do método delete() pelo método delete() simulado
-        Escola::shouldReceive('delete')->andReturn(true);
+        // Substitua a instância real do model pelo mock
+        app()->instance(Escola::class, $escolaMock);
 
         // Chame a rota e verifique se é redirecionado corretamente
         $response = $this->put('escola/excluir/1');
         $response->assertRedirect(route('escola.listar'));
     }
-}
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Mockery::close();
+    }
+}
