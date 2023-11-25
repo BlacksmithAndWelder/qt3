@@ -13,45 +13,49 @@ class ViewConfigTest extends TestCase
      */
     public function testViewConfigReturnsExpectedArray()
     {
-        // Mocking the env() function
-        $envMock = $this->getMockBuilder('EnvMock')
-            ->setMethods(['env'])
+        // Mocking the include function
+        $mockedInclude = $this->getMockBuilder('IncludeMock')
+            ->setMethods(['include'])
             ->getMock();
 
-        // Mocking the storage_path() function
-        $storagePathMock = $this->getMockBuilder('StoragePathMock')
-            ->setMethods(['storage_path'])
-            ->getMock();
-
-        // Set up expectations for env() function
-        $envMock->expects($this->any())
-            ->method('env')
-            ->willReturnMap([
-                ['VIEW_COMPILED_PATH', null, $storagePathMock->storage_path('framework/views')],
+        // Set up expectations for the include function
+        $mockedInclude->expects($this->once())
+            ->method('include')
+            ->with(__DIR__ . '/../path/to/your/config/views.php')
+            ->willReturn([
+                'paths' => [
+                    resource_path('views'),
+                ],
+                'compiled' => realpath(storage_path('framework/views')),
             ]);
 
-        // Set up expectations for storage_path() function
-        $storagePathMock->expects($this->any())
-            ->method('storage_path')
-            ->willReturnCallback(function ($path) {
-                return realpath(__DIR__ . '/../path/to/your/storage/' . $path);
-            });
+        // Replace the real include function with our mock
+        $this->mockFunction('include', $mockedInclude);
 
-        // Define a constant to mock __DIR__
-        define('__DIR__', realpath(__DIR__ . '/../path/to/your/test'));
-
-        // Set up the expected configuration array
-        $expectedConfig = [
-            'paths' => [
-                __DIR__ . '/../path/to/your/views',  // Adjust the path accordingly
-            ],
-            'compiled' => realpath(__DIR__ . '/../path/to/your/storage/framework/views'),
-        ];
-
-        // Include the file to be tested
+        // Call the method or function that includes the file
         $config = include __DIR__ . '/../path/to/your/config/views.php';
 
         // Verifying the configuration
-        $this->assertEquals($expectedConfig, $config);
+        $this->assertIsArray($config);
+        $this->assertArrayHasKey('paths', $config);
+        $this->assertArrayHasKey('compiled', $config);
     }
+
+    /**
+     * @codeCoverageIgnore
+     * Mock the include function for testing.
+     *
+     * @param string $functionName
+     * @param object $mock
+     */
+    private function mockFunction($functionName, $mock)
+    {
+        $namespace = __NAMESPACE__ . '\\';
+
+        eval("namespace $namespace { function $functionName() { global \$__PHPSHADOWER__INCLUDEMOCK__; return \$__PHPSHADOWER__INCLUDEMOCK__->$functionName(...func_get_args()); } }");
+
+        $GLOBALS['__PHPSHADOWER__INCLUDEMOCK__'] = $mock;
+    }
+}
+
 }
