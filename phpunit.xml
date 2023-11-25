@@ -16,12 +16,6 @@
         <include>
             <directory suffix=".php">./app</directory>
         </include>
-         <exclude>
-            <!-- Exclua os diretórios que você deseja ignorar -->
-            <directory suffix=".php">./tests/Unit</directory>
-            <!-- ou -->
-            <!-- <file>./app/Http/Controllers/Excluido/ExcluidoController.php</file> -->
-        </exclude>
     </coverage>
     <php>
         <server name="APP_ENV" value="testing"/>
