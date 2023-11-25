@@ -1,5 +1,4 @@
 <?php
-<?php
 
 use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
