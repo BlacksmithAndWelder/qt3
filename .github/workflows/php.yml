@@ -32,8 +32,9 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: clear key cache
-      run: php artisan config:cache
+    - name: mocky
+      run: composer require --dev mockery/mockery
+
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
