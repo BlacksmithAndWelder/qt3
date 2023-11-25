@@ -8,14 +8,11 @@ class SuporteTarefaTest extends TestCase
 {
     public function test_status_method_returns_suporte_tarefa_status_relation()
     {
-        // Criar uma instância de SuporteTarefa
-        $suporteTarefa = new SuporteTarefa();
-
         // Criar um mock manual para SuporteTarefaStatus
         $suporteTarefaStatusMock = $this->createMock(SuporteTarefaStatus::class);
 
-        // Configurar manualmente a relação hasOne
-        $suporteTarefa->setSuporteTarefaStatus($suporteTarefaStatusMock);
+        // Criar uma instância de SuporteTarefa com a relação injetada
+        $suporteTarefa = new SuporteTarefa($suporteTarefaStatusMock);
 
         // Chamar o método status
         $result = $suporteTarefa->status();
@@ -26,14 +23,11 @@ class SuporteTarefaTest extends TestCase
 
     public function test_usuario_method_returns_user_relation()
     {
-        // Criar uma instância de SuporteTarefa
-        $suporteTarefa = new SuporteTarefa();
-
         // Criar um mock manual para User
         $userMock = $this->createMock(User::class);
 
-        // Configurar manualmente a relação hasOne
-        $suporteTarefa->setUser($userMock);
+        // Criar uma instância de SuporteTarefa com a relação injetada
+        $suporteTarefa = new SuporteTarefa(null, $userMock);
 
         // Chamar o método usuario
         $result = $suporteTarefa->usuario();
