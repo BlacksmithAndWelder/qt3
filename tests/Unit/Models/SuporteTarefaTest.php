@@ -12,6 +12,7 @@ class SuporteTarefaTest extends TestCase
     public function test_check_if_suporte_tarefa_columns_are_correct()
     {
         $suporteTarefa = new SuporteTarefa;
+
         $expected = [
             'status_id',
             'user_id',
@@ -22,8 +23,15 @@ class SuporteTarefaTest extends TestCase
             'updated_at',
         ];
 
-        $arrayCompared = array_diff($expected, $suporteTarefa->getFillable());
+        $fillableColumns = $suporteTarefa->getFillable();
 
-        $this->assertEquals(0, count($arrayCompared));
+        // Verificar se todos os campos esperados estão no fillable
+        foreach ($expected as $column) {
+            $this->assertContains($column, $fillableColumns, "A coluna '$column' está ausente de fillable.");
+        }
+
+        // Verificar se não há campos extras em fillable
+        $extraColumns = array_diff($fillableColumns, $expected);
+        $this->assertEmpty($extraColumns, "Campos extras em fillable: " . implode(', ', $extraColumns));
     }
 }
