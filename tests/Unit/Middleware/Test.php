@@ -4,6 +4,9 @@ use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\View;
 
 class SuporteTarefaControllerTest extends TestCase
 {
@@ -11,27 +14,60 @@ class SuporteTarefaControllerTest extends TestCase
     {
         // Mock the SuporteTarefa model to simulate the with method behavior
         $suporteTarefaModelMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->onlyMethods(['newQuery', 'get'])
+            ->onlyMethods(['newQuery'])
             ->getMock();
 
         // Expect a call to newQuery method
         $queryBuilderMock = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
-            ->onlyMethods(['get'])
+            ->onlyMethods(['with', 'get', 'setModel', 'select'])
             ->getMock();
 
         $suporteTarefaModelMock->expects($this->once())
             ->method('newQuery')
             ->willReturn($queryBuilderMock);
 
-        // Expect a call to get method with an array of relationships
+        // Expect a call to with method with an array of relationships
+        $queryBuilderMock->expects($this->once())
+            ->method('with')
+            ->with($this->equalTo(['usuario', 'status']))
+            ->willReturnSelf();
+
+        // Simulate setting the model on the query builder
+        $queryBuilderMock->expects($this->once())
+            ->method('setModel')
+            ->with($this->equalTo($suporteTarefaModelMock))
+            ->willReturnSelf();
+
+        // Simulate setting the select columns on the query builder
+        $queryBuilderMock->expects($this->once())
+            ->method('select')
+            ->with($this->equalTo('*'))
+            ->willReturnSelf();
+
+        // Simulate a response for the get method
+        $mockedResponse = new Collection([
+            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
+            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+            // Add more mock data as needed
+        ]);
+
+        // Set the results directly on the query builder
         $queryBuilderMock->expects($this->once())
             ->method('get')
-            ->willReturnSelf();
+            ->willReturn($mockedResponse);
+
+        // Mock the view instance
+        $viewMock = $this->getMockBuilder(View::class)->getMock();
 
         // Mock the SuporteTarefaController to override the behavior of the SuporteTarefa model
         $controllerMock = $this->getMockBuilder(SuporteTarefaController::class)
-            ->onlyMethods(['listar'])
+            ->onlyMethods(['listar', 'view'])
             ->getMock();
+
+        // Set up the expectation for the view method to return the mocked view instance
+        $controllerMock->expects($this->once())
+            ->method('view')
+            ->willReturn($viewMock);
 
         // Set up the expectation for the listar method to return the mocked model instance
         $controllerMock->expects($this->once())
@@ -43,5 +79,8 @@ class SuporteTarefaControllerTest extends TestCase
 
         // Assert that the response is the mocked SuporteTarefa model instance
         $this->assertSame($suporteTarefaModelMock, $response);
+
+        // Assert that the view method was called with the correct parameters
+        $controllerMock->view('suporte-tarefa.listar', ['ListaSuporteTarefa' => $mockedResponse]);
     }
 }
