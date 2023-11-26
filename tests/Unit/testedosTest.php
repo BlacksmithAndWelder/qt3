@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class SControllerTest extends TestCase
 {
-    use RefreshDatabase;
+   #use RefreshDatabase;
 
     public function testListarFunction()
     {
