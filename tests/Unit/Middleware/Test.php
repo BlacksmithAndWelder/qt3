@@ -25,6 +25,10 @@ class SuporteTarefaControllerTest extends TestCase
         ]);
 
         // Use Laravel's DB facade to mock the query builder for the SuporteTarefa model
+        DB::shouldReceive('table')
+            ->with('suporte_tarefas')
+            ->andReturnSelf();
+
         DB::shouldReceive('get')->andReturn($mockedResponse);
 
         // Use Laravel's testing helpers to assert the view response
