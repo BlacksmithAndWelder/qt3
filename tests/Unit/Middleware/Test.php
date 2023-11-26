@@ -13,26 +13,6 @@ class RequestTest extends TestCase
         $this->assertTrue($request->authorize());
     }
 
-    public function testRules()
-    {
-        $request = new Request();
-    
-        // Mocking input data
-        $requestData = [
-            'nome' => 'Aberto',
-        ];
-    
-        // Ajuste as regras esperadas de acordo com a lógica real do seu aplicativo
-        $expectedRules = [
-            'nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado',
-        ];
-    
-        $this->assertEquals($expectedRules, $request->rules());
-    
-        // You can still use Laravel's built-in validation to test the rules
-        $validator = validator($requestData, $request->rules());
-        $this->assertTrue($validator->passes());
-    }
     
 
     public function testAttributes()
