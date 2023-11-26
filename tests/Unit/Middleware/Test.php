@@ -11,17 +11,19 @@ class SuporteTarefaControllerTest extends TestCase
     {
         // Mock the SuporteTarefa model to simulate the with method behavior
         $suporteTarefaModelMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->onlyMethods(['with'])
+            ->onlyMethods(['newQuery', 'get'])
             ->getMock();
 
-        // Define the expected arguments for the with method
-        $expectedWithArguments = ['usuario', 'status'];
-
-        // Set up the expectation for the with method to be called with specific arguments
+        // Expect a call to newQuery method
         $suporteTarefaModelMock->expects($this->once())
-            ->method('with')
-            ->with($this->equalTo($expectedWithArguments))
-            ->willReturnSelf(); // Return the mocked model instance
+            ->method('newQuery')
+            ->willReturnSelf();
+
+        // Expect a call to get method with an array of relationships
+        $suporteTarefaModelMock->expects($this->once())
+            ->method('get')
+            ->with(['usuario', 'status'])
+            ->willReturnSelf();
 
         // Mock the SuporteTarefaController to override the behavior of the SuporteTarefa model
         $controllerMock = $this->getMockBuilder(SuporteTarefaController::class)
