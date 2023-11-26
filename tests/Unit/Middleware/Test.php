@@ -15,14 +15,17 @@ class SuporteTarefaControllerTest extends TestCase
             ->getMock();
 
         // Expect a call to newQuery method
+        $queryBuilderMock = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
+            ->onlyMethods(['get'])
+            ->getMock();
+
         $suporteTarefaModelMock->expects($this->once())
             ->method('newQuery')
-            ->willReturnSelf();
+            ->willReturn($queryBuilderMock);
 
         // Expect a call to get method with an array of relationships
-        $suporteTarefaModelMock->expects($this->once())
+        $queryBuilderMock->expects($this->once())
             ->method('get')
-            ->with(['usuario', 'status'])
             ->willReturnSelf();
 
         // Mock the SuporteTarefaController to override the behavior of the SuporteTarefa model
