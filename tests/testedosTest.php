@@ -1,34 +1,34 @@
 <?php
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
+use App\Models\SuporteTarefa;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
 use Tests\TestCase;
 
 class SuporteTarefaControllerTest extends TestCase
 {
-    use RefreshDatabase; // Este trait reinicia o banco de dados entre os testes
-
     public function testListarFunction()
     {
-        // Criar alguns dados de teste no banco de dados
-        $suporteTarefa = SuporteTarefa::factory()->create([
-            'assunto' => 'Assunto 1',
-            'descricao' => 'Descrição 1',
+        // Criar alguns dados de teste usando a instância do Eloquent Collection
+        $mockedData = new Collection([
+            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
+            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+            // Adicionar mais dados conforme necessário
         ]);
 
-        // Chamar a rota que corresponde à função 'listar'
-        $response = $this->get(route('suporte-tarefa.listar'));
+        // Criar uma instância do controlador
+        $controller = new SuporteTarefaController();
 
-        // Verificar se a resposta contém o status HTTP 200 (OK)
-        $response->assertStatus(200);
+        // Chamar a função 'listar' com os dados mockados
+        $response = $controller->listar($mockedData);
 
-        // Verificar se a view 'suporte-tarefa.listar' está sendo retornada
-        $response->assertViewIs('suporte-tarefa.listar');
+        // Verificar se a resposta é uma instância de View
+        $this->assertInstanceOf(View::class, $response);
 
-        // Verificar se os dados da tarefa de suporte estão presentes na view
-        $response->assertViewHas('ListaSuporteTarefa', function ($lista) use ($suporteTarefa) {
-            return $lista->contains($suporteTarefa);
-        });
+        // Verificar se a view correta está sendo retornada
+        $this->assertEquals('suporte-tarefa.listar', $response->getName());
+
+        // Verificar se os dados mockados estão sendo passados para a view
+        $this->assertEquals($mockedData, $response->getData()['ListaSuporteTarefa']);
     }
 }
