@@ -1,50 +1,30 @@
 <?php
-use PHPUnit\Framework\TestCase;
-use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
-use App\Models\SuporteTarefa;
-use App\Models\SuporteTarefaStatus;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\View;
+<?php
 
-class SuporteTarefaControllerTest extends TestCase
+namespace Tests\Unit\Http\Requests\Escola;
+
+use App\Http\Requests\Escola\Request;
+use Tests\TestCase;
+
+class EscolaRequestTest extends TestCase
 {
-    public function testListarFunction()
+    /**
+     * Test if the user is authorized to make the request.
+     *
+     * @return void
+     */
+    public function testAuthorize()
     {
-        // Create a user
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $request = new Request();
 
-        // Create SuporteTarefa instances directly
-        $suporteTarefa1 = SuporteTarefa::create([
-            'status_id' => 1,
-            'user_id' => $user->id,
-            'assunto' => 'Support Task 1',
-            'descricao' => 'Description for Support Task 1',
-            'urgente' => false,
-        ]);
+        // Assuming your authorization logic is based on a user.
+        // You can mock a user or set up your user authentication logic accordingly.
+        // For example, if the user is authenticated, the authorization should return true.
 
-        $suporteTarefa2 = SuporteTarefa::create([
-            'status_id' => 2,
-            'user_id' => $user->id,
-            'assunto' => 'Support Task 2',
-            'descricao' => 'Description for Support Task 2',
-            'urgente' => true,
-        ]);
+        // Mocking an authenticated user
+        $this->actingAs(factory(\App\User::class)->create());
 
-        // Mock the SuporteTarefa model using Laravel's model mocking
-        SuporteTarefa::shouldReceive('with')
-            ->with(['usuario', 'status'])
-            ->andReturnSelf();
-
-        // Use Laravel's testing helpers to assert the view response
-        $response = app(SuporteTarefaController::class)->listar();
-
-        // Assert that the view is correct and contains the expected data
-        $response->assertViewIs('suporte-tarefa.listar');
-        $response->assertViewHas('ListaSuporteTarefa', [$suporteTarefa1->toArray(), $suporteTarefa2->toArray()]);
+        // Call the authorize method and assert that it returns true
+        $this->assertTrue($request->authorize());
     }
 }
