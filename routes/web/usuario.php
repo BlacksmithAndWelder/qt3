@@ -1,17 +1,35 @@
 <?php
+use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
 
-use App\Http\Controllers\Web\Usuario\UsuarioController;
-use Illuminate\Support\Facades\Route;
+class ApiTest extends TestCase
+{
+    public function testApiRouteReturnsUsers()
+    {
+        // Faz um mock do facade DB para simular o acesso ao banco de dados
+        $dbMock = $this->getMockBuilder('Illuminate\Database\Query\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-Route::get('usuario', [UsuarioController::class, 'listar'])->name('usuario.listar');
+        // Configura a expectativa para o método select
+        $dbMock->expects($this->once())
+            ->method('select')
+            ->with('users.*')
+            ->willReturn([['user' => 'mocked_user']]);
 
-Route::get('usuario/criar', [UsuarioController::class, 'criar'])->name('usuario.criar');
+        // Substitui a implementação do facade DB pelo mock
+        DB::shouldReceive('table')->with('users')->andReturn($dbMock);
 
-Route::post('usuario', [UsuarioController::class, 'salvar'])->name('usuario.salvar');
+        // Simula uma requisição GET para a rota /api/user
+        $response = $this->get('/api/user');
 
-Route::get('usuario/editar/{id}', [UsuarioController::class, 'editar'])->name('usuario.editar');
+        // Verifica se a resposta tem o código HTTP 200 (OK)
+        $response->assertStatus(200);
 
-Route::post('usuario/atualizar/{id}', [UsuarioController::class,'atualizar'])->name('usuario.atualizar');
+        // Verifica se a resposta é um JSON contendo a chave 'user'
+        $response->assertJson([['user' => 'mocked_user']]);
 
-Route::put('usuario/excluir/{id}', [UsuarioController::class, 'excluir'])->name('usuario.excluir');
+        // Outras asserções específicas podem ser adicionadas conforme necessário
+    }
+}
 
