@@ -10,10 +10,13 @@ class RequestTest extends TestCase
         // Criar uma instância da classe Request (a classe que estamos testando)
         $request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['rules']) // Definir apenas os métodos que queremos substituir
             ->getMock();
 
         // Substituir a implementação da função rules
-        $request->method('rules')->willReturn(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado']);
+        $request->expects($this->any())
+            ->method('rules')
+            ->willReturn(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado']);
 
         // Chamar a função rules e verificar se o resultado é o esperado
         $this->assertEquals(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado'], $request->rules());
