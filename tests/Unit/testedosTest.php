@@ -1,9 +1,7 @@
 <?php
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
-use App\Models\SuporteTarefa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class STCTest extends TestCase
@@ -12,25 +10,19 @@ class STCTest extends TestCase
     {
         // Criar uma coleção de tarefas mockadas
         $mockedTarefas = [
-            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
-            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+            ['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1'],
+            ['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2'],
         ];
 
-        // Criar um mock para a classe SuporteTarefa
-        $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->getMock();
+        // Configurar uma consulta simulada usando a fachada DB
+        DB::shouldReceive('table')
+            ->with('suporte_tarefas')
+            ->once()
+            ->andReturnSelf();
 
-        // Configurar o mock para retornar as tarefas mockadas
-        $suporteTarefaMock->expects($this->once())
-            ->method('with')
-            ->willReturnSelf();
-
-        $suporteTarefaMock->expects($this->once())
-            ->method('get')
-            ->willReturn(collect($mockedTarefas));
-
-        // Substituir a implementação real pelo mock
-        $this->app->instance(SuporteTarefa::class, $suporteTarefaMock);
+        DB::shouldReceive('get')
+            ->once()
+            ->andReturn(collect($mockedTarefas));
 
         // Chamar a rota que corresponde à função 'listar'
         $response = $this->get(route('suporte-tarefa.listar'));
