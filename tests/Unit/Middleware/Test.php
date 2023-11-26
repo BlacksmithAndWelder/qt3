@@ -5,7 +5,6 @@ use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\View\View;
 
 class SuporteTarefaControllerTest extends TestCase
@@ -14,28 +13,13 @@ class SuporteTarefaControllerTest extends TestCase
     {
         // Mock the SuporteTarefa model to simulate the with method behavior
         $suporteTarefaModelMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->onlyMethods(['newQuery'])
+            ->onlyMethods(['with', 'get'])
             ->getMock();
-
-        // Expect a call to newQuery method
-        $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
-            ->onlyMethods(['with', 'get', 'setModel', 'select'])
-            ->getMock();
-
-        $suporteTarefaModelMock->expects($this->once())
-            ->method('newQuery')
-            ->willReturn($queryBuilderMock);
 
         // Expect a call to with method with an array of relationships
-        $queryBuilderMock->expects($this->once())
+        $suporteTarefaModelMock->expects($this->once())
             ->method('with')
             ->with($this->equalTo(['usuario', 'status']))
-            ->willReturnSelf();
-
-        // Simulate setting the model on the query builder
-        $queryBuilderMock->expects($this->once())
-            ->method('setModel')
-            ->with($this->equalTo($suporteTarefaModelMock))
             ->willReturnSelf();
 
         // Simulate a response for the get method
@@ -45,8 +29,8 @@ class SuporteTarefaControllerTest extends TestCase
             // Add more mock data as needed
         ]);
 
-        // Set the results directly on the query builder
-        $queryBuilderMock->expects($this->once())
+        // Set the results directly on the model mock
+        $suporteTarefaModelMock->expects($this->once())
             ->method('get')
             ->willReturn($mockedResponse);
 
