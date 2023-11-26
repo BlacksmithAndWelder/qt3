@@ -1,6 +1,5 @@
 <?php
 use Tests\TestCase;
-
 use App\Http\Requests\Escola\Request as EscolaRequest;
 
 class EscolaRequestTest extends TestCase
@@ -22,11 +21,16 @@ class EscolaRequestTest extends TestCase
         $this->assertArrayHasKey('max_alunos', $rules);
         $this->assertArrayHasKey('segmento', $rules);
 
+        $this->assertIsArray($rules['nome']);
         $this->assertContains('required', $rules['nome']);
+        $this->assertIsArray($rules['endereco']);
         $this->assertContains('string', $rules['endereco']);
         $this->assertContains('nullable', $rules['endereco']);
+        $this->assertIsArray($rules['pais']);
         $this->assertContains('string', $rules['pais']);
+        $this->assertIsArray($rules['max_alunos']);
         $this->assertContains('numeric', $rules['max_alunos']);
+        $this->assertIsArray($rules['segmento']);
         $this->assertContains('required', $rules['segmento']);
     }
 
