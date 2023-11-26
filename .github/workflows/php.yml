@@ -59,7 +59,7 @@ jobs:
           
        
         - name: Run tests with phpunit/phpunit
-          run: vendor/bin/phpunit --coverage-clover=coverage.xml coverage --coverage-filter app
+          run: vendor/bin/phpunit --coverage-clover=coverage.xml  --coverage-filter app
 
           
         - name: SonarCloud Scan
