@@ -5,7 +5,7 @@ use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\View\View;
 
 class SuporteTarefaControllerTest extends TestCase
@@ -18,7 +18,7 @@ class SuporteTarefaControllerTest extends TestCase
             ->getMock();
 
         // Expect a call to newQuery method
-        $queryBuilderMock = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
+        $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
             ->onlyMethods(['with', 'get', 'setModel', 'select'])
             ->getMock();
 
@@ -36,12 +36,6 @@ class SuporteTarefaControllerTest extends TestCase
         $queryBuilderMock->expects($this->once())
             ->method('setModel')
             ->with($this->equalTo($suporteTarefaModelMock))
-            ->willReturnSelf();
-
-        // Simulate setting the select columns on the query builder
-        $queryBuilderMock->expects($this->once())
-            ->method('select')
-            ->with($this->equalTo('*'))
             ->willReturnSelf();
 
         // Simulate a response for the get method
