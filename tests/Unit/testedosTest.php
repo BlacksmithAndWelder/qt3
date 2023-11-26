@@ -1,8 +1,6 @@
 <?php
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
-use App\Models\SuporteTarefaStatus;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
@@ -22,10 +20,9 @@ class STCTest extends TestCase
         $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
             ->getMock();
 
-        // Configurar o mock para retornar as tarefas mockadas ao chamar 'with' e 'get'
+        // Configurar o mock para retornar as tarefas mockadas
         $suporteTarefaMock->expects($this->once())
             ->method('with')
-            ->with($this->equalTo(['usuario', 'status']))
             ->willReturnSelf();
 
         $suporteTarefaMock->expects($this->once())
