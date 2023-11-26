@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @codeCoverageIgnore
+ */
 use App\Http\Controllers\Web\Aluno\AlunoController;
 use App\Models\Aluno;
 use Illuminate\View\View;
@@ -13,8 +16,21 @@ class AlunoControllerTest extends TestCase
     public function testListarRetornaViewComListaDeAlunos()
     {
         // Arrange
-        $aluno1 = factory(Aluno::class)->create();
-        $aluno2 = factory(Aluno::class)->create();
+        $aluno1 = new Aluno([
+            'nome' => 'João',
+            'sobrenome' => 'Silva',
+            'idade' => 25,
+            'bolsa_estudos' => true,
+            'turma_id' => 1,
+        ]);
+
+        $aluno2 = new Aluno([
+            'nome' => 'Maria',
+            'sobrenome' => 'Santos',
+            'idade' => 22,
+            'bolsa_estudos' => false,
+            'turma_id' => 2,
+        ]);
 
         $alunoController = $this->getMockBuilder(AlunoController::class)
             ->onlyMethods(['getAlunosFromDatabase'])
