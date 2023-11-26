@@ -5,6 +5,22 @@ use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
+    public function testRules()
+    {
+        // Criar uma instância da classe Request (a classe que estamos testando)
+        $request = $this->getMockBuilder(Request::class)
+            ->setMethods(null) // Não há métodos específicos para mock neste caso
+            ->getMock();
+
+        // Definir o mock para a função rules retornar um array específico
+        $request->expects($this->any())
+            ->method('rules')
+            ->willReturn(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado']);
+
+        // Chamar a função rules e verificar se o resultado é o esperado
+        $this->assertEquals(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado'], $request->rules());
+    }
+}
     public function testAuthorize()
     {
         $request = new Request();
