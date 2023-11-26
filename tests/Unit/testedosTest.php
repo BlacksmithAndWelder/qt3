@@ -1,56 +1,47 @@
 <?php
-use Tests\TestCase;
-use App\Http\Controllers\Web\Escola\EscolaController;
-use App\Http\Requests\Escola\Request as EscolaRequest;
-use App\Models\Escola;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\TestCase;
+use App\Http\Requests\Escola\Request;
 
-class EscolaControllerTest extends TestCase
+class EscolaRequestTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function testListar()
+    public function testValidationPasses()
     {
-        // Inicialize o banco de dados com algumas escolas fictícias
-        factory(Escola::class, 3)->create();
-
-        $escolaController = new EscolaController();
-
-        $view = $escolaController->listar();
-
-        $this->assertIsObject($view);
-        $this->assertEquals('escola.listar', $view->name());
-        $this->assertViewHas('ListaEscola');
-    }
-
-    public function testCriar()
-    {
-        $escolaController = new EscolaController();
-
-        $view = $escolaController->criar();
-
-        $this->assertIsObject($view);
-        $this->assertEquals('escola.criar', $view->name());
-        $this->assertViewHas('Escola');
-    }
-
-    public function testSalvar()
-    {
-        $dados = [
+        $request = new Request([
             'nome' => 'Escola Teste',
-            'segmento' => 'Ensino Médio',
-            // Adicione outros campos conforme necessário
-        ];
+            'endereco' => 'Rua Teste, 123',
+            'pais' => 'Brasil',
+            'max_alunos' => 100,
+            'segmento' => 'Ensino Fundamental',
+        ]);
 
-        $request = new EscolaRequest($dados);
-
-        $escolaController = new EscolaController();
-
-        $response = $escolaController->salvar($request);
-
-        $this->assertRedirect(route('escola.listar'), $response);
-        $this->assertSessionHas(['classe' => 'success', 'mensagem' => 'Cadastro realizado com sucesso!']);
+        $this->assertTrue($request->passes());
     }
 
-    // Adicione testes semelhantes para as funções editar, atualizar e excluir
+    public function testValidationFailsWithMissingRequiredFields()
+    {
+        $request = new Request([]);
+
+        try {
+            $request->validate();
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('nome', $e->errors());
+            $this->assertArrayHasKey('segmento', $e->errors());
+            $this->assertCount(2, $e->errors());
+            return;
+        }
+
+        $this->fail('ValidationException should have been thrown.');
+    }
+
+    public function testAttributes()
+    {
+        $request = new Request([]);
+
+        $this->assertEquals('Nome', $request->attributes()['nome']);
+        $this->assertEquals('Segmento', $request->attributes()['segmento']);
+        $this->assertEquals('Endereço', $request->attributes()['endereco']);
+        $this->assertEquals('País', $request->attributes()['pais']);
+        $this->assertEquals('Quantidade máxima de alunos', $request->attributes()['max_alunos']);
+    }
 }
