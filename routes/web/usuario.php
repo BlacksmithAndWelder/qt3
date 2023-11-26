@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class UsersApiControllerTest extends TestCase
+class UsersrtrtrtrApiControllerTest extends TestCase
 {
     use RefreshDatabase;
 
