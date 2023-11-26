@@ -20,7 +20,7 @@ class STCTest extends TestCase
 
         // Criar um mock para a classe SuporteTarefa
         $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->onlyMethods(['with', 'get'])
+            ->addMethods(['with', 'get'])
             ->getMock();
 
         // Configurar o mock para retornar as tarefas mockadas ao chamar 'with' e 'get'
