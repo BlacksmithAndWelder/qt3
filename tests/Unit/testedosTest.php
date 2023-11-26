@@ -1,5 +1,6 @@
 <?php
 use Tests\TestCase;
+
 use App\Http\Requests\Escola\Request as EscolaRequest;
 
 class EscolaRequestTest extends TestCase
