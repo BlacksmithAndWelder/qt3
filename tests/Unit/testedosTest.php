@@ -15,6 +15,11 @@ class STCTest extends TestCase
             new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
         ];
 
+        // Definir temporariamente um método shouldReceive para o teste
+        SuporteTarefa::macro('shouldReceive', function ($method) {
+            return $this;
+        });
+
         // Substituir a implementação real de SuporteTarefa usando shouldReceive
         SuporteTarefa::shouldReceive('with')
             ->andReturnSelf();
@@ -35,4 +40,3 @@ class STCTest extends TestCase
         $response->assertViewHas('ListaSuporteTarefa', $mockedTarefas);
     }
 }
-
