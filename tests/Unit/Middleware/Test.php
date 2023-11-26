@@ -2,11 +2,8 @@
 use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
-use App\Models\SuporteTarefaStatus;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\View as ViewFacade;
+use Illuminate\Support\Facades\View;
 
 class SuporteTarefaControllerTest extends TestCase
 {
@@ -19,26 +16,10 @@ class SuporteTarefaControllerTest extends TestCase
             // Add more mock data as needed
         ]);
 
-        // Mock the view instance
-        $viewMock = $this->getMockBuilder(View::class)->getMock();
+        // Use Laravel's testing helpers to assert the view response
+        $response = app(SuporteTarefaController::class)->listar();
 
-        // Mock the View facade to override the behavior of the view method
-        ViewFacade::shouldReceive('make')
-            ->with('suporte-tarefa.listar', ['ListaSuporteTarefa' => $mockedResponse])
-            ->andReturn($viewMock);
-
-        // Create an instance of the SuporteTarefaController
-        $controller = new SuporteTarefaController();
-
-        // Call the listar method
-        $response = $controller->listar();
-
-        // Assert that the response is the mocked SuporteTarefa model instance
-        $this->assertSame($mockedResponse, $response);
-
-        // Assert that the View facade was called with the correct parameters
-        ViewFacade::shouldHaveReceived('make')
-            ->with('suporte-tarefa.listar', ['ListaSuporteTarefa' => $mockedResponse])
-            ->once();
+        $response->assertViewIs('suporte-tarefa.listar');
+        $response->assertViewHas('ListaSuporteTarefa', $mockedResponse->toArray());
     }
 }
