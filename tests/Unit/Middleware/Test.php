@@ -1,29 +1,74 @@
 <?php
 
-namespace Tests\Unit\Http\Requests\Escola;
+<?php
 
-use App\Http\Requests\Escola\Request;
+namespace Tests\Feature;
+
+use App\Http\Controllers\Web\Aluno\AlunoController;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class EscolaRequestTest extends TestCase
+class AlunoControllerTest extends TestCase
 {
     /**
-     * Test if the user is authorized to make the request.
+     * Test if the listar route returns a 200 status code.
      *
      * @return void
      */
-    public function testAuthorize()
+    public function testListarRoute()
     {
-        $request = new Request();
+        $this->get('aluno')->assertStatus(200);
+    }
 
-        // Assuming your authorization logic is based on a user.
-        // You can mock a user or set up your user authentication logic accordingly.
-        // For example, if the user is authenticated, the authorization should return true.
+    /**
+     * Test if the criar route returns a 200 status code.
+     *
+     * @return void
+     */
+    public function testCriarRoute()
+    {
+        $this->get('aluno/criar')->assertStatus(200);
+    }
 
-        // Mocking an authenticated user
-        $this->actingAs(factory(\App\User::class)->create());
+    /**
+     * Test if the salvar route returns a 200 status code.
+     *
+     * @return void
+     */
+    public function testSalvarRoute()
+    {
+        $this->post('aluno')->assertStatus(200);
+    }
 
-        // Call the authorize method and assert that it returns true
-        $this->assertTrue($request->authorize());
+    /**
+     * Test if the editar route returns a 200 status code.
+     *
+     * @return void
+     */
+    public function testEditarRoute()
+    {
+        $this->get('aluno/editar/1')->assertStatus(200);
+    }
+
+    /**
+     * Test if the atualizar route returns a 200 status code.
+     *
+     * @return void
+     */
+    public function testAtualizarRoute()
+    {
+        $this->post('aluno/atualizar/1')->assertStatus(200);
+    }
+
+    /**
+     * Test if the excluir route returns a 200 status code.
+     *
+     * @return void
+     */
+    public function testExcluirRoute()
+    {
+        $this->put('aluno/excluir/1')->assertStatus(200);
     }
 }
+
