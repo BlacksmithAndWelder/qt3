@@ -1,9 +1,13 @@
 <?php
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class ApitTest extends TestCase
+class UsersApiControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testApiRouteReturnsUsers()
     {
         // Faz um mock do facade DB para simular o acesso ao banco de dados
@@ -32,4 +36,3 @@ class ApitTest extends TestCase
         // Outras asserções específicas podem ser adicionadas conforme necessário
     }
 }
-
