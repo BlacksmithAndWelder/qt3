@@ -19,4 +19,4 @@ class AlunoControllerTest extends TestCase
         $this->get('aluno')->assertStatus(200);
     }
 
-   
+}
