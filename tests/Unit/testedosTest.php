@@ -1,38 +1,34 @@
 <?php
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
-use Mockery\MockInterface;
+use App\Http\Requests\Escola\Request as EscolaRequest;
 
-class ApiTest extends TestCase
+class EscolaRequestTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected function setUp(): void
+    public function testValidacaoNomeObrigatorio()
     {
-        parent::setUp();
+        $validator = Validator::make(['nome' => ''], (new EscolaRequest())->rules());
 
-        // Configuração e criação do mock para DB facade
-        $this->mockDatabase = $this->mock(DB::class, function (MockInterface $mock) {
-            $queryBuilderMock = $this->mock('alias:' . Illuminate\Database\Query\Builder::class);
-            $queryBuilderMock->shouldReceive('select')->andReturnSelf(); // Pode adicionar outras expectativas conforme necessário
-            $mock->shouldReceive('table')->andReturn($queryBuilderMock);
-        });
+        $this->assertTrue($validator->fails());
+        $this->assertEquals('O campo Nome é obrigatório.', $validator->errors()->first('nome'));
     }
 
-    public function testApiRoute()
+    public function testValidacaoNomeMaximo256Caracteres()
     {
-        // Simula uma requisição GET para a rota /api/user
-        $response = $this->get('/api/user');
+        $nomeExcedendoLimite = str_repeat('a', 257);
 
-        // Verifica se a resposta tem o código HTTP 200 (OK)
-        $response->assertStatus(200);
+        $validator = Validator::make(['nome' => $nomeExcedendoLimite], (new EscolaRequest())->rules());
 
-        // Verifica se a resposta é um JSON contendo a chave 'user'
-        $response->assertJson(['user' => 'mocked_user']);
-
-        // Outras asserções específicas podem ser adicionadas conforme necessário
+        $this->assertTrue($validator->fails());
+        $this->assertEquals('O campo Nome não deve ser maior que 256 caracteres.', $validator->errors()->first('nome'));
     }
+
+    public function testValidacaoEnderecoOpcional()
+    {
+        $validator = Validator::make(['endereco' => ''], (new EscolaRequest())->rules());
+
+        $this->assertFalse($validator->fails());
+    }
+
+    // Adicione testes similares para os outros campos e regras de validação...
 }
