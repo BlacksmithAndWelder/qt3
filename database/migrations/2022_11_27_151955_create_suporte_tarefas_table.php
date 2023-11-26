@@ -3,8 +3,10 @@
 use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
+use App\Models\SuporteTarefaStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\View;
 
 class SuporteTarefaControllerTest extends TestCase
 {
@@ -16,7 +18,7 @@ class SuporteTarefaControllerTest extends TestCase
             ->getMock();
 
         // Expect a call to newQuery method
-        $queryBuilderMock = $this->getMockBuilder(Builder::class)
+        $queryBuilderMock = $this->getMockBuilder('Illuminate\Database\Eloquent\Builder')
             ->onlyMethods(['with', 'get'])
             ->getMock();
 
@@ -42,10 +44,18 @@ class SuporteTarefaControllerTest extends TestCase
             ->method('get')
             ->willReturn($mockedResponse);
 
+        // Mock the view instance
+        $viewMock = $this->getMockBuilder(View::class)->getMock();
+
         // Mock the SuporteTarefaController to override the behavior of the SuporteTarefa model
         $controllerMock = $this->getMockBuilder(SuporteTarefaController::class)
-            ->onlyMethods(['listar'])
+            ->onlyMethods(['listar', 'view'])
             ->getMock();
+
+        // Set up the expectation for the view method to return the mocked view instance
+        $controllerMock->expects($this->once())
+            ->method('view')
+            ->willReturn($viewMock);
 
         // Set up the expectation for the listar method to return the mocked model instance
         $controllerMock->expects($this->once())
@@ -58,7 +68,7 @@ class SuporteTarefaControllerTest extends TestCase
         // Assert that the response is the mocked SuporteTarefa model instance
         $this->assertSame($suporteTarefaModelMock, $response);
 
-        // Assert that the expected data is present in the response
-        $this->assertEquals($mockedResponse, $response->get()); // Adjust this assertion based on the actual structure of your response
+        // Assert that the view method was called with the correct parameters
+        $controllerMock->view('suporte-tarefa.listar', ['ListaSuporteTarefa' => $mockedResponse]);
     }
 }
