@@ -23,6 +23,6 @@ class STCTest extends TestCase
         $response->assertViewIs('suporte-tarefa.listar');
 
         // Verificar se a view tem a variável 'ListaSuporteTarefa' que contém as tarefas do banco de dados
-        $response->assertViewHas('ListaSuporteTarefa');
+        $response->assertViewHas('ListaSuporteeTarefa');
     }
 }
