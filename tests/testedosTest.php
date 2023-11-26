@@ -28,5 +28,39 @@ class SuporteTarefaControllerTest extends TestCase
         // Verificar se a view 'suporte-tarefa.criar' está sendo retornada
         $response->assertViewIs('suporte-tarefa.criar');
     }
+
+    use RefreshDatabase;
+
+    public function testListarFunction()
+    {
+        // Criar alguns dados mockados
+        $mockedData = [
+            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
+            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+        ];
+
+        // Criar um mock para SuporteTarefa
+        $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Configurar o mock para retornar os dados mockados quando 'get' for chamado
+        $suporteTarefaMock::method('get')->willReturn($mockedData);
+
+        // Substituir a implementação real pelo mock
+        $this->app->instance(SuporteTarefa::class, $suporteTarefaMock);
+
+        // Chamar a rota que corresponde à função 'listar'
+        $response = $this->get(route('suporte-tarefa.listar'));
+
+        // Verificar se a resposta contém o status HTTP 200 (OK)
+        $response->assertStatus(200);
+
+        // Verificar se a view 'suporte-tarefa.listar' está sendo retornada
+        $response->assertViewIs('suporte-tarefa.listar');
+
+        // Verificar se os dados mockados estão presentes na view
+        $response->assertViewHas('ListaSuporteTarefa', $mockedData);
+    }
     
 }
