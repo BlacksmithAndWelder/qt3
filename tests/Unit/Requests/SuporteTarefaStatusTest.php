@@ -20,7 +20,7 @@ class RequestTest extends TestCase
         // Chamar a função rules e verificar se o resultado é o esperado
         $this->assertEquals(['nome' => 'required|string|max:20|in:Aberto,Inconsistente,Solucionado,Recusado'], $request->rules());
     }
-}
+
     public function testAuthorize()
     {
         $request = new Request();
