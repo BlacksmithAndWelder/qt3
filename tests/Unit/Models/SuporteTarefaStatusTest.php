@@ -1,4 +1,7 @@
 <?php
+/**
+ * @codeCoverageIgnore
+ */
 use PHPUnit\Framework\TestCase;
 use App\Models\SuporteTarefaStatus;
 
