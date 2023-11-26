@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class ApiTest extends TestCase
+class ApitTest extends TestCase
 {
     public function testApiRouteReturnsUsers()
     {
