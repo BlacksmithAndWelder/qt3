@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Tests\TestCase;
 
-class SuporteTarefaControllerTest extends TestCase
+class SuporteTControllerTest extends TestCase
 {
     use RefreshDatabase;
 
