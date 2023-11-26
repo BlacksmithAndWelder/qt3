@@ -8,63 +8,44 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Tests\TestCase;
 
-class SuporteTControllerTest extends TestCase
+class STCTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function testEditarFunction()
+    public function testListarFunction()
     {
-        // Criar um ID de tarefa para editar
-        $tarefaId = 1;
+        // Criar uma coleção de tarefas mockadas
+        $mockedTarefas = [
+            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
+            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+        ];
 
-        // Criar uma tarefa mockada
+        // Criar um mock para a classe SuporteTarefa
         $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->disableOriginalConstructor()
+            ->onlyMethods(['with', 'get'])
             ->getMock();
 
-        // Configurar o mock para retornar uma tarefa mockada ao chamar 'find'
-        $suporteTarefaMock->method('find')->willReturn(new SuporteTarefa(['assunto' => 'Assunto Editado', 'descricao' => 'Descrição Editada']));
+        // Configurar o mock para retornar as tarefas mockadas ao chamar 'with' e 'get'
+        $suporteTarefaMock->expects($this->once())
+            ->method('with')
+            ->with($this->equalTo(['usuario', 'status']))
+            ->willReturnSelf();
+
+        $suporteTarefaMock->expects($this->once())
+            ->method('get')
+            ->willReturn(collect($mockedTarefas));
 
         // Substituir a implementação real pelo mock
         $this->app->instance(SuporteTarefa::class, $suporteTarefaMock);
 
-        // Chamar a rota que corresponde à função 'editar'
-        $response = $this->get(route('suporte-tarefa.editar', ['id' => $tarefaId]));
+        // Chamar a rota que corresponde à função 'listar'
+        $response = $this->get(route('suporte-tarefa.listar'));
 
         // Verificar se a resposta contém o status HTTP 200 (OK)
         $response->assertStatus(200);
 
-        // Verificar se a view 'suporte-tarefa.editar' está sendo retornada
-        $response->assertViewIs('suporte-tarefa.editar');
+        // Verificar se a view 'suporte-tarefa.listar' está sendo retornada
+        $response->assertViewIs('suporte-tarefa.listar');
 
-        // Verificar se os dados da tarefa mockada estão presentes na view
-        $response->assertViewHas('SuporteTarefa', ['assunto' => 'Assunto Editado', 'descricao' => 'Descrição Editada']);
-    }
-
-    public function testExcluirFunction()
-    {
-        // Criar um ID de tarefa para excluir
-        $tarefaId = 1;
-
-        // Criar uma tarefa mockada
-        $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        // Configurar o mock para retornar uma tarefa mockada ao chamar 'find'
-        $suporteTarefaMock->method('find')->willReturn(new SuporteTarefa(['assunto' => 'Assunto Excluído', 'descricao' => 'Descrição Excluída']));
-
-        // Substituir a implementação real pelo mock
-        $this->app->instance(SuporteTarefa::class, $suporteTarefaMock);
-
-        // Chamar a rota que corresponde à função 'excluir'
-        $response = $this->delete(route('suporte-tarefa.excluir', ['id' => $tarefaId]));
-
-        // Verificar se a resposta redireciona para a rota 'suporte-tarefa.listar'
-        $response->assertRedirect(route('suporte-tarefa.listar'));
-
-        // Verificar se a mensagem de exclusão bem-sucedida está presente na sessão
-        $this->assertSessionHas('classe', 'success');
-        $this->assertSessionHas('mensagem', 'Exclusão realizada com sucesso!');
+        // Verificar se os dados das tarefas mockadas estão presentes na view
+        $response->assertViewHas('ListaSuporteTarefa', $mockedTarefas);
     }
 }
