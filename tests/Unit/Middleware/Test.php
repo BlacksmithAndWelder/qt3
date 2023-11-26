@@ -1,5 +1,4 @@
 <?php
-<?php
 
 namespace Tests\Unit\Http\Requests\Escola;
 
