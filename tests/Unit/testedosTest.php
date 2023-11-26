@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Web\Suporte\SuporteTarefaController;
 use App\Models\SuporteTarefa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -6,12 +7,20 @@ use Tests\TestCase;
 
 class STCTest extends TestCase
 {
-    use RefreshDatabase; // Usar o trait RefreshDatabase para resetar o banco de dados a cada teste
-
     public function testListarFunction()
     {
-        // Criar algumas tarefas no banco de dados de teste
-        SuporteTarefa::factory()->count(2)->create();
+        // Criar uma resposta mock do banco de dados
+        $mockedTarefas = [
+            new SuporteTarefa(['assunto' => 'Assunto 1', 'descricao' => 'Descrição 1']),
+            new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
+        ];
+
+        // Substituir a implementação real de SuporteTarefa usando shouldReceive
+        SuporteTarefa::shouldReceive('with')
+            ->andReturnSelf();
+
+        SuporteTarefa::shouldReceive('get')
+            ->andReturn(collect($mockedTarefas));
 
         // Chamar a rota que corresponde à função 'listar'
         $response = $this->get(route('suporte-tarefa.listar'));
@@ -22,7 +31,8 @@ class STCTest extends TestCase
         // Verificar se a view 'suporte-tarefa.listar' está sendo retornada
         $response->assertViewIs('suporte-tarefa.listar');
 
-        // Verificar se a view tem a variável 'ListaSuporteTarefa' que contém as tarefas do banco de dados
-        $response->assertViewHas('ListaSuporteeTarefa');
+        // Verificar se os dados das tarefas mockadas estão presentes na view
+        $response->assertViewHas('ListaSuporteTarefa', $mockedTarefas);
     }
 }
+
