@@ -15,17 +15,23 @@ class STCTest extends TestCase
             new SuporteTarefa(['assunto' => 'Assunto 2', 'descricao' => 'Descrição 2']),
         ];
 
-        // Definir temporariamente um método shouldReceive para o teste
-        SuporteTarefa::macro('shouldReceive', function ($method) {
-            return $this;
-        });
+        // Criar um mock manual da classe SuporteTarefa
+        $suporteTarefaMock = $this->getMockBuilder(SuporteTarefa::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        // Substituir a implementação real de SuporteTarefa usando shouldReceive
-        SuporteTarefa::shouldReceive('with')
-            ->andReturnSelf();
+        // Definir a expectativa para o método with
+        $suporteTarefaMock->expects($this->once())
+            ->method('with')
+            ->willReturnSelf();
 
-        SuporteTarefa::shouldReceive('get')
-            ->andReturn(collect($mockedTarefas));
+        // Definir a expectativa para o método get
+        $suporteTarefaMock->expects($this->once())
+            ->method('get')
+            ->willReturn(collect($mockedTarefas));
+
+        // Substituir a implementação real de SuporteTarefa usando o mock manual
+        $this->app->instance(SuporteTarefa::class, $suporteTarefaMock);
 
         // Chamar a rota que corresponde à função 'listar'
         $response = $this->get(route('suporte-tarefa.listar'));
