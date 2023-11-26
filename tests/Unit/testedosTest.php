@@ -1,54 +1,56 @@
 <?php
 use Tests\TestCase;
+use App\Http\Controllers\Web\Escola\EscolaController;
 use App\Http\Requests\Escola\Request as EscolaRequest;
+use App\Models\Escola;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class EscolaRequestTest extends TestCase
+class EscolaControllerTest extends TestCase
 {
-    public function testAuthorizeRetornaTrue()
+    use RefreshDatabase;
+
+    public function testListar()
     {
-        $escolaRequest = new EscolaRequest();
-        $this->assertTrue($escolaRequest->authorize());
+        // Inicialize o banco de dados com algumas escolas fictícias
+        factory(Escola::class, 3)->create();
+
+        $escolaController = new EscolaController();
+
+        $view = $escolaController->listar();
+
+        $this->assertIsObject($view);
+        $this->assertEquals('escola.listar', $view->name());
+        $this->assertViewHas('ListaEscola');
     }
 
-    public function testRules()
+    public function testCriar()
     {
-        $escolaRequest = new EscolaRequest();
-        $rules = $escolaRequest->rules();
+        $escolaController = new EscolaController();
 
-        $this->assertArrayHasKey('nome', $rules);
-        $this->assertArrayHasKey('endereco', $rules);
-        $this->assertArrayHasKey('pais', $rules);
-        $this->assertArrayHasKey('max_alunos', $rules);
-        $this->assertArrayHasKey('segmento', $rules);
+        $view = $escolaController->criar();
 
-        $this->assertIsArray($rules['nome']);
-        $this->assertContains('required', $rules['nome']);
-        $this->assertIsArray($rules['endereco']);
-        $this->assertContains('string', $rules['endereco']);
-        $this->assertContains('nullable', $rules['endereco']);
-        $this->assertIsArray($rules['pais']);
-        $this->assertContains('string', $rules['pais']);
-        $this->assertIsArray($rules['max_alunos']);
-        $this->assertContains('numeric', $rules['max_alunos']);
-        $this->assertIsArray($rules['segmento']);
-        $this->assertContains('required', $rules['segmento']);
+        $this->assertIsObject($view);
+        $this->assertEquals('escola.criar', $view->name());
+        $this->assertViewHas('Escola');
     }
 
-    public function testAttributes()
+    public function testSalvar()
     {
-        $escolaRequest = new EscolaRequest();
-        $attributes = $escolaRequest->attributes();
+        $dados = [
+            'nome' => 'Escola Teste',
+            'segmento' => 'Ensino Médio',
+            // Adicione outros campos conforme necessário
+        ];
 
-        $this->assertArrayHasKey('nome', $attributes);
-        $this->assertArrayHasKey('endereco', $attributes);
-        $this->assertArrayHasKey('pais', $attributes);
-        $this->assertArrayHasKey('max_alunos', $attributes);
-        $this->assertArrayHasKey('segmento', $attributes);
+        $request = new EscolaRequest($dados);
 
-        $this->assertEquals('Nome', $attributes['nome']);
-        $this->assertEquals('Endereço', $attributes['endereco']);
-        $this->assertEquals('País', $attributes['pais']);
-        $this->assertEquals('Quantidade máxima de alunos', $attributes['max_alunos']);
-        $this->assertEquals('Segmento', $attributes['segmento']);
+        $escolaController = new EscolaController();
+
+        $response = $escolaController->salvar($request);
+
+        $this->assertRedirect(route('escola.listar'), $response);
+        $this->assertSessionHas(['classe' => 'success', 'mensagem' => 'Cadastro realizado com sucesso!']);
     }
+
+    // Adicione testes semelhantes para as funções editar, atualizar e excluir
 }
