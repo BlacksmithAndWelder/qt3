@@ -1,7 +1,5 @@
 <?php
 
-<?php
-
 namespace Tests\Feature;
 
 use App\Http\Controllers\Web\Aluno\AlunoController;
