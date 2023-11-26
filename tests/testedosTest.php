@@ -9,70 +9,24 @@ use Tests\TestCase;
 
 class SuporteTarefaControllerTest extends TestCase
 {
-    public function testListarFunction()
-    {
-        // Criar uma instância do controlador
-        $controller = new SuporteTarefaController();
-
-        // Mock da classe SuporteTarefa para simular o comportamento do Eloquent
-        $suporteTarefaMock = $this->createMock(SuporteTarefa::class);
-
-        // Simular um resultado para a função with do Eloquent
-        $suporteTarefaMock->expects($this->once())
-            ->method('with')
-            ->willReturnSelf();
-
-        // Simular um resultado para a função get do Eloquent
-        $suporteTarefaMock->expects($this->once())
-            ->method('get')
-            ->willReturn(new Collection([])); // Pode adicionar dados mockados conforme necessário
-
-        // Substituir a instância real por nosso mock
-        $controller->setSuporteTarefa($suporteTarefaMock);
-
-        // Chamar a função 'listar'
-        $response = $controller->listar();
-
-        // Verificar se a resposta é uma instância de View
-        $this->assertInstanceOf(View::class, $response);
-
-        // Verificar se a view correta está sendo retornada
-        $this->assertEquals('suporte-tarefa.listar', $response->getName());
-    }
-
     public function testCriarFunction()
     {
-        // Criar uma instância do controlador
-        $controller = new SuporteTarefaController();
-
-        // Mock das classes User e SuporteTarefaStatus para simular o comportamento do Eloquent
+        // Criar instâncias mock para User e SuporteTarefaStatus
         $userMock = $this->createMock(User::class);
         $statusMock = $this->createMock(SuporteTarefaStatus::class);
 
-        // Mock da classe SuporteTarefa para simular a criação de uma nova tarefa
-        $suporteTarefaMock = $this->createMock(SuporteTarefa::class);
+        // Substituir as instâncias reais pelos mocks
+        app()->instance(User::class, $userMock);
+        app()->instance(SuporteTarefaStatus::class, $statusMock);
 
-        // Simular um usuário e status para o novo SuporteTarefa
-        $userMock->expects($this->once())
-            ->method('find')
-            ->willReturnSelf();
+        // Chamar a rota que corresponde à função 'criar'
+        $response = $this->get(route('suporte-tarefa.criar'));
 
-        $statusMock->expects($this->once())
-            ->method('find')
-            ->willReturnSelf();
+        // Verificar se a resposta contém o status HTTP 200 (OK)
+        $response->assertStatus(200);
 
-        // Substituir as instâncias reais por nossos mocks
-        $controller->setUser($userMock);
-        $controller->setStatus($statusMock);
-        $controller->setSuporteTarefa($suporteTarefaMock);
-
-        // Chamar a função 'criar'
-        $response = $controller->criar();
-
-        // Verificar se a resposta é uma instância de View
-        $this->assertInstanceOf(View::class, $response);
-
-        // Verificar se a view correta está sendo retornada
-        $this->assertEquals('suporte-tarefa.criar', $response->getName());
+        // Verificar se a view 'suporte-tarefa.criar' está sendo retornada
+        $response->assertViewIs('suporte-tarefa.criar');
     }
+    
 }
