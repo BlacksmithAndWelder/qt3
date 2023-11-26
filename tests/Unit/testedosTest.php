@@ -1,34 +1,49 @@
 <?php
-use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 use App\Http\Requests\Escola\Request as EscolaRequest;
 
 class EscolaRequestTest extends TestCase
 {
-    public function testValidacaoNomeObrigatorio()
+    public function testAuthorizeRetornaTrue()
     {
-        $validator = Validator::make(['nome' => ''], (new EscolaRequest())->rules());
-
-        $this->assertTrue($validator->fails());
-        $this->assertEquals('O campo Nome é obrigatório.', $validator->errors()->first('nome'));
+        $escolaRequest = new EscolaRequest();
+        $this->assertTrue($escolaRequest->authorize());
     }
 
-    public function testValidacaoNomeMaximo256Caracteres()
+    public function testRules()
     {
-        $nomeExcedendoLimite = str_repeat('a', 257);
+        $escolaRequest = new EscolaRequest();
+        $rules = $escolaRequest->rules();
 
-        $validator = Validator::make(['nome' => $nomeExcedendoLimite], (new EscolaRequest())->rules());
+        $this->assertArrayHasKey('nome', $rules);
+        $this->assertArrayHasKey('endereco', $rules);
+        $this->assertArrayHasKey('pais', $rules);
+        $this->assertArrayHasKey('max_alunos', $rules);
+        $this->assertArrayHasKey('segmento', $rules);
 
-        $this->assertTrue($validator->fails());
-        $this->assertEquals('O campo Nome não deve ser maior que 256 caracteres.', $validator->errors()->first('nome'));
+        $this->assertContains('required', $rules['nome']);
+        $this->assertContains('string', $rules['endereco']);
+        $this->assertContains('nullable', $rules['endereco']);
+        $this->assertContains('string', $rules['pais']);
+        $this->assertContains('numeric', $rules['max_alunos']);
+        $this->assertContains('required', $rules['segmento']);
     }
 
-    public function testValidacaoEnderecoOpcional()
+    public function testAttributes()
     {
-        $validator = Validator::make(['endereco' => ''], (new EscolaRequest())->rules());
+        $escolaRequest = new EscolaRequest();
+        $attributes = $escolaRequest->attributes();
 
-        $this->assertFalse($validator->fails());
+        $this->assertArrayHasKey('nome', $attributes);
+        $this->assertArrayHasKey('endereco', $attributes);
+        $this->assertArrayHasKey('pais', $attributes);
+        $this->assertArrayHasKey('max_alunos', $attributes);
+        $this->assertArrayHasKey('segmento', $attributes);
+
+        $this->assertEquals('Nome', $attributes['nome']);
+        $this->assertEquals('Endereço', $attributes['endereco']);
+        $this->assertEquals('País', $attributes['pais']);
+        $this->assertEquals('Quantidade máxima de alunos', $attributes['max_alunos']);
+        $this->assertEquals('Segmento', $attributes['segmento']);
     }
-
-    // Adicione testes similares para os outros campos e regras de validação...
 }
