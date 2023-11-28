@@ -59,8 +59,8 @@ jobs:
         - name: Install dependencies with composer
           run: composer update --no-ansi --no-interaction --no-progress
         
-        - name : eu que add banco de dados teste
-          run: php artisan migrate --env=testing
+       # - name : eu que add banco de dados teste
+       #   run: php artisan migrate --env=testing
 
           
        
