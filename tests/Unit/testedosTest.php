@@ -1,14 +1,14 @@
+
 <?php
 
 namespace Tests\Unit\Controllers\Web\Usuario;
 
-use Mockery;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Http\Controllers\Web\Usuario\UsuarioController;
 use App\Models\User as Usuario;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Http\Requests\Usuario\Request as UsuarioRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 
 class UsuarioControllerTest extends TestCase
 {
@@ -19,28 +19,17 @@ class UsuarioControllerTest extends TestCase
         parent::setUp();
 
         // Run migrations and seed your database
-        $this->artisan('migrate');
-    }
-
-    public function tearDown(): void
-    {
-        Mockery::close();
-
-        parent::tearDown();
+        Artisan::call('migrate');
     }
 
     /** @test */
     public function it_should_return_view_with_users()
     {
         // Mock the Usuario model to return a fake list of users
-        $usuarioMock = Mockery::mock(Usuario::class);
-        $usuarioMock->shouldReceive('get')->andReturn(collect([
-            new Usuario(['name' => 'User1', 'email' => 'user1@example.com']),
-            new Usuario(['name' => 'User2', 'email' => 'user2@example.com']),
+        DB::shouldReceive('table->get')->andReturn(collect([
+            ['name' => 'User1', 'email' => 'user1@example.com'],
+            ['name' => 'User2', 'email' => 'user2@example.com'],
         ]));
-
-        // Replace the actual model with the mock in the container
-        app()->instance(Usuario::class, $usuarioMock);
 
         // Call the listar method on the controller
         $controller = new UsuarioController();
