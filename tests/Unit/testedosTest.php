@@ -1,6 +1,6 @@
 <?php
-use Tests\TestCase;
-#  use PHPUnit\Framework\TestCase;
+#use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Turma\TurmaController;
 
 class TurmaControllerTest extends TestCase
