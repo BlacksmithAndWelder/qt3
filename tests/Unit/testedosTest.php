@@ -1,32 +1,57 @@
 <?php
+
+namespace Tests\Unit\Controllers\Web\Usuario;
+
+use Mockery;
 use Tests\TestCase;
-use App\Http\Requests\Turma\Request as TurmaRequest;
-use App\Models\Escola;
-use App\Models\Turma;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Web\Usuario\UsuarioController;
+use App\Models\User as Usuario;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\Requests\Usuario\Request as UsuarioRequest;
 
-class TurmaControllerTest extends TestCase
+class UsuarioControllerTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase;
 
-    public function testSalvar()
+    protected function setUp(): void
     {
-        // Mock do método find da facade DB
-        DB::shouldReceive('table->find')->andReturn((object) Escola::factory()->create()->toArray());
+        parent::setUp();
 
-        // Dados de exemplo para a requisição
-        $dados = [
-            'escola_id' => $this->faker->randomDigit,
-            'ativo' => true,
-            'equipe' => 'Equipe A',
-            'sala' => 'Sala 101',
-        ];
-
-        $response = $this->post('/turma/salvar', $dados);
-
-        $response->assertRedirect('/turma/listar');
+        // Run migrations and seed your database
+        $this->artisan('migrate');
     }
 
-    // ... Outros métodos de teste
+    public function tearDown(): void
+    {
+        Mockery::close();
+
+        parent::tearDown();
+    }
+
+    /** @test */
+    public function it_should_return_view_with_users()
+    {
+        // Mock the Usuario model to return a fake list of users
+        $usuarioMock = Mockery::mock(Usuario::class);
+        $usuarioMock->shouldReceive('get')->andReturn(collect([
+            new Usuario(['name' => 'User1', 'email' => 'user1@example.com']),
+            new Usuario(['name' => 'User2', 'email' => 'user2@example.com']),
+        ]));
+
+        // Replace the actual model with the mock in the container
+        app()->instance(Usuario::class, $usuarioMock);
+
+        // Call the listar method on the controller
+        $controller = new UsuarioController();
+        $response = $controller->listar();
+
+        // Assert that the view is returned with the correct data
+        $response->assertViewIs('usuario.listar');
+        $response->assertViewHas('ListaUsuarios', function ($usuarios) {
+            return $usuarios->count() == 2;
+        });
+    }
+
+    // Add more test cases as needed
 }
