@@ -2,15 +2,24 @@
 
 namespace Tests\Unit\Controllers\Web\Usuario;
 
-use Illuminate\Foundation\Testing\DatabaseMock;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Http\Controllers\Web\Usuario\UsuarioController;
 use App\Models\User as Usuario;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 
 class UsuarioControllerTest extends TestCase
 {
-    use DatabaseMock;
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Run migrations and seed your database
+        Artisan::call('migrate');
+    }
 
     /** @test */
     public function it_should_return_view_with_users()
