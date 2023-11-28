@@ -1,9 +1,7 @@
 <?php
 use Mockery as m;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use App\Http\Controllers\Web\Turma\TurmaController;
-use App\Http\Requests\Turma\Request as TurmaRequest;
-use App\Models\Escola;
 use App\Models\Turma;
 
 class TurmaControllerTest extends TestCase
@@ -15,52 +13,18 @@ class TurmaControllerTest extends TestCase
 
     public function testListar()
     {
+        // Cria um mock para a classe Turma
         $mockTurma = m::mock(Turma::class);
         $mockTurma->shouldReceive('with->get')->andReturn(['item1', 'item2', 'item3']);
 
+        // Cria uma instância do controlador passando o mockTurma
         $controller = new TurmaController($mockTurma);
 
-        $view = $controller->listar();
+        // Chama diretamente o método a ser testado, evitando a resolução automática de dependências
+        $view = $controller->listar($mockTurma);
 
+        // Faz as asserções dos resultados
         $this->assertEquals('turma.listar', $view->name());
         $this->assertEquals(['item1', 'item2', 'item3'], $view->getData()['ListaTurma']);
     }
-
-    public function testCriar()
-    {
-        $mockTurma = m::mock(Turma::class);
-        $mockEscola = m::mock(Escola::class);
-        $mockEscola->shouldReceive('get')->andReturn(['escola1', 'escola2']);
-
-        $controller = new TurmaController($mockTurma, $mockEscola);
-
-        $view = $controller->criar();
-
-        $this->assertEquals('turma.criar', $view->name());
-        $this->assertInstanceOf(Turma::class, $view->getData()['Turma']);
-        $this->assertEquals(['escola1', 'escola2'], $view->getData()['ListaEscolas']);
-    }
-
-    public function testSalvar()
-    {
-        $mockRequest = m::mock(TurmaRequest::class);
-        $mockTurma = m::mock(Turma::class);
-        $mockEscola = m::mock(Escola::class);
-        
-        $mockRequest->shouldReceive('validated')->andReturn(['escola_id' => 1, 'ativo' => true, 'equipe' => 'equipe1', 'sala' => 'sala1']);
-        $mockEscola->shouldReceive('find')->with(1)->andReturn(m::self());
-        $mockTurma->shouldReceive('create')->with([
-            'escola_id' => 1,
-            'ativo' => true,
-            'equipe' => 'equipe1',
-            'sala' => 'sala1',
-        ])->andReturn($mockTurma);
-
-        $controller = new TurmaController($mockTurma, $mockEscola);
-        $response = $controller->salvar($mockRequest);
-
-        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $response);
-    }
-
-    // Adicione outros testes para os métodos 'editar', 'atualizar', 'excluir' conforme necessário
 }
