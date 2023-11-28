@@ -1,8 +1,5 @@
-
 <?php
-
 namespace Tests\Unit\Controllers\Web\Usuario;
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Http\Controllers\Web\Usuario\UsuarioController;
