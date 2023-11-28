@@ -32,6 +32,9 @@ class UsuarioControllerTest extends TestCase
     /** @test */
     public function it_should_return_view_with_users()
     {
+        // Mock the database connection
+        \DB::shouldReceive('connection->getPdo')->andReturn(null);
+
         // Mock the Usuario model to return a fake list of users
         $usuarioMock = Mockery::mock(Usuario::class);
         $usuarioMock->shouldReceive('get')->andReturn(collect([
