@@ -11,6 +11,17 @@ permissions:
 
 jobs:
   build:
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: projeto-b2
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+  
 
     runs-on: ubuntu-latest
 
@@ -33,26 +44,6 @@ jobs:
       run:  composer install --prefer-dist --no-progress
          
     #composer require laravel/database-testing --dev
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres:15.1-alpine
-        # Provide the password for postgres
-        env:
-          POSTGRES_DB: projeto-b2
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: admin
-          PGDATA: /data/db-projeto-b2
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-
-
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
   tests:
