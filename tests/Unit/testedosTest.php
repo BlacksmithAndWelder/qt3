@@ -1,47 +1,46 @@
 <?php
-use Illuminate\Validation\ValidationException;
-use PHPUnit\Framework\TestCase;
-use App\Http\Requests\Escola\Request;
+use Mockery as m;
+use App\Http\Controllers\Web\Turma\TurmaController;
+use App\Http\Requests\Turma\Request as TurmaRequest;
+use App\Models\Escola;
+use App\Models\Turma;
+use Tests\TestCase;
 
-class EscolaRequestTest extends TestCase
+class TurmaControllerTest extends TestCase
 {
-    public function testValidationPasses()
+    public function tearDown(): void
     {
-        $request = new Request([
-            'nome' => 'Escola Teste',
-            'endereco' => 'Rua Teste, 123',
-            'pais' => 'Brasil',
-            'max_alunos' => 100,
-            'segmento' => 'Ensino Fundamental',
-        ]);
-
-        $this->assertTrue($request->passes());
+        m::close();
     }
 
-    public function testValidationFailsWithMissingRequiredFields()
+    
+    public function testListar()
     {
-        $request = new Request([]);
+        $mockTurma = m::mock(Turma::class);
+        $mockTurma->shouldReceive('with->get')->andReturn(['item1', 'item2', 'item3']);
 
-        try {
-            $request->validate();
-        } catch (ValidationException $e) {
-            $this->assertArrayHasKey('nome', $e->errors());
-            $this->assertArrayHasKey('segmento', $e->errors());
-            $this->assertCount(2, $e->errors());
-            return;
-        }
+        $controller = new TurmaController($mockTurma);
 
-        $this->fail('ValidationException should have been thrown.');
+        $view = $controller->listar();
+
+        $this->assertEquals('turma.listar', $view->name());
+        $this->assertEquals(['item1', 'item2', 'item3'], $view->getData()['ListaTurma']);
     }
 
-    public function testAttributes()
+    public function testCriar()
     {
-        $request = new Request([]);
+        $mockTurma = m::mock(Turma::class);
+        $mockEscola = m::mock(Escola::class);
+        $mockEscola->shouldReceive('get')->andReturn(['escola1', 'escola2']);
 
-        $this->assertEquals('Nome', $request->attributes()['nome']);
-        $this->assertEquals('Segmento', $request->attributes()['segmento']);
-        $this->assertEquals('Endereço', $request->attributes()['endereco']);
-        $this->assertEquals('País', $request->attributes()['pais']);
-        $this->assertEquals('Quantidade máxima de alunos', $request->attributes()['max_alunos']);
+        $controller = new TurmaController($mockTurma, $mockEscola);
+
+        $view = $controller->criar();
+
+        $this->assertEquals('turma.criar', $view->name());
+        $this->assertInstanceOf(Turma::class, $view->getData()['Turma']);
+        $this->assertEquals(['escola1', 'escola2'], $view->getData()['ListaEscolas']);
     }
+
+    // Adicione outros testes para os métodos 'salvar', 'editar', 'atualizar', 'excluir' conforme necessário
 }
