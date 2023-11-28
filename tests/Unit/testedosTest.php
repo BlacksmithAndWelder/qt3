@@ -1,6 +1,6 @@
 <?php
 use Mockery as m;
-use tests\TestCase;
+use Tests\TestCase;
 use App\Http\Controllers\Web\Turma\TurmaController;
 use App\Http\Requests\Turma\Request as TurmaRequest;
 use App\Models\Escola;
