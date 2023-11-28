@@ -1,10 +1,12 @@
 <?php
-use Tests\TestCase;
-
+#use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
+use App\Models\Turma;
 class TurmaControllerTest extends TestCase
 {
     public function testListar()
     {
+
         // Criar um mock manual para a classe Turma
         $mockTurma = $this->createMock(Turma::class);
         $mockTurma->expects($this->once())
