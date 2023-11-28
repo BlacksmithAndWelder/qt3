@@ -40,7 +40,10 @@ jobs:
         image: postgres:15.1-alpine
         # Provide the password for postgres
         env:
+          POSTGRES_DB: projeto-b2
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: admin
+          PGDATA: /data/db-projeto-b2
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
