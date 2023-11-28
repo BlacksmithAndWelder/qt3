@@ -14,47 +14,31 @@ class UsuarioControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Run migrations and seed your database
-        $this->artisan('migrate');
-    }
-
-    public function tearDown(): void
-    {
-        Mockery::close();
-
-        parent::tearDown();
-    }
-
     /** @test */
     public function it_should_return_view_with_users()
     {
-        // Mock the database connection
-        \DB::shouldReceive('connection->getPdo')->andReturn(null);
-
-        // Mock the Usuario model to return a fake list of users
+        // Criar um mock para o modelo Usuario
         $usuarioMock = Mockery::mock(Usuario::class);
+        
+        // Configurar o mock para retornar uma coleção de usuários fictícios
         $usuarioMock->shouldReceive('get')->andReturn(collect([
             new Usuario(['name' => 'User1', 'email' => 'user1@example.com']),
             new Usuario(['name' => 'User2', 'email' => 'user2@example.com']),
         ]));
 
-        // Replace the actual model with the mock in the container
-        app()->instance(Usuario::class, $usuarioMock);
+        // Substituir o resolvedor de instância para Usuario com o mock
+        $this->app->instance(Usuario::class, $usuarioMock);
 
-        // Call the listar method on the controller
+        // Chamar o método listar no controlador
         $controller = new UsuarioController();
         $response = $controller->listar();
 
-        // Assert that the view is returned with the correct data
+        // Verificar se a view é retornada com os dados corretos
         $response->assertViewIs('usuario.listar');
         $response->assertViewHas('ListaUsuarios', function ($usuarios) {
             return $usuarios->count() == 2;
         });
     }
 
-    // Add more test cases as needed
+    // Adicionar mais casos de teste conforme necessário
 }
