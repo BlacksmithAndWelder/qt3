@@ -30,10 +30,23 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: |
-         composer install --prefer-dist --no-progress
-         composer require mockery/mockery --dev
+      run:  composer install --prefer-dist --no-progress
+         
     #composer require laravel/database-testing --dev
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:15.1-alpine
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: admin
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
 
 
@@ -57,7 +70,9 @@ jobs:
             coverage: xdebug
             
         - name: Install dependencies with composer
-          run: composer update --no-ansi --no-interaction --no-progress
+          run: |
+            composer update --no-ansi --no-interaction --no-progress
+            composer require mockery/mockery --dev
         
        # - name : eu que add banco de dados teste
        #   run: php artisan migrate --env=testing
