@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery as m;
 use Tests\TestCase;
 use App\Http\Controllers\Web\Turma\TurmaController;
@@ -9,8 +8,6 @@ use App\Models\Turma;
 
 class TurmaControllerTest extends TestCase
 {
-    use RefreshDatabase; // Este trait recria o banco de dados antes de cada teste
-
     public function tearDown(): void
     {
         m::close();
