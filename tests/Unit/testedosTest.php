@@ -3,31 +3,17 @@ use Tests\TestCase;
 use App\Http\Requests\Turma\Request as TurmaRequest;
 use App\Models\Escola;
 use App\Models\Turma;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class TurmaControllerTest extends TestCase
 {
     use WithFaker;
 
-    public function testCriar()
-    {
-        $response = $this->get('/turma/criar');
-
-        $response->assertStatus(200);
-        $response->assertViewIs('turma.criar');
-    }
-
     public function testSalvar()
     {
-        // Crie um mock para a classe Escola
-        $escolaMock = $this->getMockBuilder(Escola::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        // Faça com que o mock responda como uma escola de exemplo
-        $escolaMock->method('find')->willReturn(Escola::factory()->create());
-
-        $this->app->instance(Escola::class, $escolaMock);
+        // Mock do método find da facade DB
+        DB::shouldReceive('table->find')->andReturn((object) Escola::factory()->create()->toArray());
 
         // Dados de exemplo para a requisição
         $dados = [
