@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Controllers\Web\Usuario;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMock;
 use Tests\TestCase;
 use App\Http\Controllers\Web\Usuario\UsuarioController;
 use App\Models\User as Usuario;
@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class UsuarioControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMock;
 
     /** @test */
     public function it_should_return_view_with_users()
     {
-        // Use the actual database to insert test data
-        Usuario::create(['name' => 'User1', 'email' => 'user1@example.com']);
-        Usuario::create(['name' => 'User2', 'email' => 'user2@example.com']);
-
         // Mock the Usuario model to return a fake list of users
         DB::shouldReceive('table->get')->andReturn(collect([
             ['name' => 'User1', 'email' => 'user1@example.com'],
