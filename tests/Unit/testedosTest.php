@@ -1,33 +1,46 @@
 <?php
-#use Tests\TestCase;
-use PHPUnit\Framework\TestCase;
-use App\Http\Controllers\Web\Turma\TurmaController;
+use Tests\TestCase;
+use App\Http\Requests\Turma\Request as TurmaRequest;
+use App\Models\Escola;
+use App\Models\Turma;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class TurmaControllerTest extends TestCase
 {
-    public function testListar()
+    use WithFaker;
+
+    public function testCriar()
     {
-        // Criar um mock manual para a classe Turma
-        $mockTurma = $this->getMockBuilder(Turma::class)
-            ->onlyMethods(['with', 'toArray']) // Adicione outros métodos que você espera chamar
-            ->getMock();
-        
-        $mockTurma->expects($this->once())
-            ->method('with')
-            ->willReturnSelf();
+        $response = $this->get('/turma/criar');
 
-        $mockTurma->expects($this->once())
-            ->method('toArray')
-            ->willReturn(['item1', 'item2', 'item3']); // Pode ajustar para refletir o formato real do retorno
-
-        // Criar uma instância do controlador passando o mockTurma
-        $controller = new TurmaController($mockTurma);
-
-        // Chama diretamente o método a ser testado, evitando a resolução automática de dependências
-        $view = $controller->listar();
-
-        // Faz as asserções dos resultados
-        $this->assertEquals('turma.listar', $view->name());
-        $this->assertEquals(['item1', 'item2', 'item3'], $view->getData()['ListaTurma']);
+        $response->assertStatus(200);
+        $response->assertViewIs('turma.criar');
     }
+
+    public function testSalvar()
+    {
+        // Crie um mock para a classe Escola
+        $escolaMock = $this->getMockBuilder(Escola::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Faça com que o mock responda como uma escola de exemplo
+        $escolaMock->method('find')->willReturn(Escola::factory()->create());
+
+        $this->app->instance(Escola::class, $escolaMock);
+
+        // Dados de exemplo para a requisição
+        $dados = [
+            'escola_id' => $this->faker->randomDigit,
+            'ativo' => true,
+            'equipe' => 'Equipe A',
+            'sala' => 'Sala 101',
+        ];
+
+        $response = $this->post('/turma/salvar', $dados);
+
+        $response->assertRedirect('/turma/listar');
+    }
+
+    // ... Outros métodos de teste
 }
