@@ -40,6 +40,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
+    - name: Remove vendor
+      run:  rm -rf vendor
+
     - name: Install dependencies
       run:  composer install --prefer-dist --no-progress
          
