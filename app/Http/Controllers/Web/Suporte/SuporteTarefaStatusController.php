@@ -11,21 +11,21 @@ class SuporteTarefaStatusController extends Controller
     
 
     public function listar(){
-        $listaSuporteTarefaStatus = SuporteTarefaStatus::get();
-        return view('suporte-tarefa-status.listar', compact('listaSuporteTarefaStatus'));
+        $ListaSuporteTarefaStatus = SuporteTarefaStatus::get();
+        return view('suporte-tarefa-status.listar', compact('ListaSuporteTarefaStatus'));
     }
-    public function criar(){
-        $suporteTarefaStatus = new SuporteTarefaStatus();
-        return view('suporte-tarefa-status.criar',compact('suporteTarefaStatus'));
+    public function criar(){ 
+        $SuporteTarefaStatus = new SuporteTarefaStatus();
+        return view('suporte-tarefa-status.criar',compact('SuporteTarefaStatus'));
     }
     public function salvar(SuporteTarefaStatusRequest $request){
         try{
             
             $dados = $request->validated();
-            $suporteTarefaStatus = array(
+            $SuporteTarefaStatus = array(
                 'nome' => $dados['nome']
             );
-            $suporteTarefaStatus = SuporteTarefaStatus::create($suporteTarefaStatus);
+            $SuporteTarefaStatus = SuporteTarefaStatus::create($SuporteTarefaStatus);
 
             return redirect()
                     ->route('suporte-tarefa-status.listar')
@@ -40,9 +40,9 @@ class SuporteTarefaStatusController extends Controller
     }
     public function editar($id){
         try {
-            $suporteTarefaStatus = SuporteTarefaStatus::find($id);
+            $SuporteTarefaStatus = SuporteTarefaStatus::find($id);
             
-            return view('suporte-tarefa-status.editar', compact('suporteTarefaStatus'));
+            return view('suporte-tarefa-status.editar', compact('SuporteTarefaStatus'));
         } catch (\Throwable $th) {
             report($th);
             return redirect()
@@ -54,9 +54,9 @@ class SuporteTarefaStatusController extends Controller
     public function atualizar(SuporteTarefaStatusRequest $request, $id){
         try {
             $dados = $request->validated();
-            $suporteTarefaStatus = SuporteTarefaStatus::find($id);
-            $suporteTarefaStatus->nome = $dados['nome'];
-            $suporteTarefaStatus->save();
+            $SuporteTarefaStatus = SuporteTarefaStatus::find($id);
+            $SuporteTarefaStatus->nome = $dados['nome'];
+            $SuporteTarefaStatus->save();
 
             return redirect()
                 ->route('suporte-tarefa-status.listar')
@@ -75,8 +75,8 @@ class SuporteTarefaStatusController extends Controller
             /**
              * Verificar se possui status antes de excluir
              */
-            $suporteTarefaStatus = SuporteTarefaStatus::find($id);
-            $suporteTarefaStatus->delete();
+            $SuporteTarefaStatus = SuporteTarefaStatus::find($id);
+            $SuporteTarefaStatus->delete();
 
             return back()
                 ->with('classe', 'success')

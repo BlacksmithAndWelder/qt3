@@ -12,14 +12,14 @@ class NasaController extends Controller
     public function detalhe(){
         try{
             
-            $response = Http::withHeaders([
+            $response = Http::withHeaders([ 
                 'Accept'=> '*/*',
             ])->withOptions([
                 'verify' => false
-            ])->get('https://api.nasa.gov/planetary/apod?api_key=v1hq9QBJCJ0KMFnCL9soFRgPWfbluwHXhJyrkTC2');
+            ])->get('https://api.nasa.gov/planetary/apod?api_key=v1hq9QBJCJ0KMFnCL9soFRgPWfbluwHXhJyrkTC2'); 
             
-            $nasaDetalhe = json_decode($response->body());
-            return view('nasa.detalhe', compact('nasaDetalhe'));
+            $NasaDetalhe = json_decode($response->body());
+            return view('nasa.detalhe', compact('NasaDetalhe'));
         } catch (\Throwable $th) {
             
             Session::put('classe', 'danger');

@@ -10,14 +10,14 @@ use App\Models\Turma;
 class AlunoController extends Controller{
      
     public function listar(){
-        $listaAluno = Aluno::get();
-        return view('aluno.listar', compact('listaAluno'));
+        $ListaAluno = Aluno::get();
+        return view('aluno.listar', compact('ListaAluno'));
     }
     
-    public function criar(){
-        $aluno = new Aluno();
-        $listaTurma = Turma::where('ativo', true)->get(); 
-        return view('aluno.criar',compact('aluno', 'listaTurma'));
+    public function criar(){ 
+        $Aluno = new Aluno();
+        $ListaTurma = Turma::where('ativo', true)->get(); 
+        return view('aluno.criar',compact('Aluno', 'ListaTurma'));
     }
 
     public function salvar(AlunoRequest $request){
@@ -47,10 +47,10 @@ class AlunoController extends Controller{
     }
     public function editar($id){
         try {
-            $aluno = Aluno::with('turma', 'turma.escola')->find($id);
-            $listaTurma = Turma::where('ativo', true)->get(); 
+            $Aluno = Aluno::with('turma', 'turma.escola')->find($id);
+            $ListaTurma = Turma::where('ativo', true)->get(); 
             
-            return view('aluno.editar', compact('aluno', 'listaTurma'));
+            return view('aluno.editar', compact('Aluno', 'ListaTurma'));
         } catch (\Throwable $th) {
             report($th);
             return redirect()

@@ -9,12 +9,12 @@ use App\Models\Escola;
 class EscolaController extends Controller{
       
     public function listar(){
-        $listaEscola = Escola::get();
-        return view('escola.listar', compact('listaEscola'));
+        $ListaEscola = Escola::get();
+        return view('escola.listar', compact('ListaEscola'));
     }
     public function criar(){
-        $escola = new Escola();
-        return view('escola.criar',compact('escola'));
+        $Escola = new Escola();
+        return view('escola.criar',compact('Escola'));
     }
     public function salvar(EscolaRequest $request){
         try{
@@ -43,9 +43,9 @@ class EscolaController extends Controller{
     }
     public function editar($id){
         try {
-            $escola = Escola::find($id);
+            $Escola = Escola::find($id);
             
-            return view('escola.editar', compact('escola'));
+            return view('escola.editar', compact('Escola'));
         } catch (\Throwable $th) {
             report($th);
             return redirect()
