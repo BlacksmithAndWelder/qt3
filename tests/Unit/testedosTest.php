@@ -1,14 +1,10 @@
 <?php
 
-use App\Http\Controllers\Web\Aluno\AlunoController;
-use App\Http\Requests\Aluno\Request as AlunoRequest;
-use App\Models\Aluno;
-use App\Models\Turma;
+use App\Http\Requests\SuporteTarefa\Request;
 use Illuminate\Validation\ValidationException;
-use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 
-class AlunoControllerTest extends TestCase
+class SuporteTarefaRequestTest extends TestCase
 {
     public function tearDown(): void
     {
@@ -16,67 +12,52 @@ class AlunoControllerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCreateAlunoWithValidData()
+    public function testRulesWithValidData()
     {
-        $request = Mockery::mock(AlunoRequest::class);
-        $request->shouldReceive('validated')->andReturn([
-            'nome' => 'João',
-            'sobrenome' => 'Silva',
-            'idade' => 25,
-            'bolsa_estudos' => true,
-            'turma_id' => 1,
-        ]);
+        // Mock da classe Request
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['input'])
+            ->getMock();
 
-        $controller = new AlunoController();
-        $response = $controller->salvar($request);
+        // Substituir a implementação da função input para fornecer dados válidos
+        $request->expects($this->any())
+            ->method('input')
+            ->willReturn([
+                'user_id' => 1,
+                'status_id' => 2,
+                'urgente' => true,
+                'assunto' => 'Assunto de teste',
+                'descricao' => 'Descrição de teste',
+            ]);
 
-        $this->assertEquals(302, $response->getStatusCode());
-        // Adicione mais asserções conforme necessário
+        // Chamar a função rules e verificar se não há exceção lançada
+        $this->assertNull($request->rules());
     }
 
-    public function testCreateAlunoWithInvalidData()
+    public function testRulesWithInvalidData()
     {
-        $request = Mockery::mock(AlunoRequest::class);
-        $request->shouldReceive('validated')->andReturn([
-            // Dados inválidos, por exemplo, falta o nome
-            'sobrenome' => 'Silva',
-            'idade' => 25,
-            'bolsa_estudos' => true,
-            'turma_id' => 1,
-        ]);
+        // Mock da classe Request
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['input'])
+            ->getMock();
 
+        // Substituir a implementação da função input para fornecer dados inválidos
+        $request->expects($this->any())
+            ->method('input')
+            ->willReturn([
+                // Dados inválidos, por exemplo, falta o assunto
+                'user_id' => 1,
+                'status_id' => 2,
+                'urgente' => true,
+                'descricao' => 'Descrição de teste',
+            ]);
+
+        // Chamar a função rules e verificar se uma exceção de validação é lançada
         $this->expectException(ValidationException::class);
-
-        $controller = new AlunoController();
-        $controller->salvar($request);
+        $request->rules();
     }
 
-    public function testCreateAlunoWithDatabaseError()
-    {
-        $request = Mockery::mock(AlunoRequest::class);
-        $request->shouldReceive('validated')->andReturn([
-            'nome' => 'João',
-            'sobrenome' => 'Silva',
-            'idade' => 25,
-            'bolsa_estudos' => true,
-            'turma_id' => 1,
-        ]);
-
-        $controller = new AlunoController();
-
-        // Mock do método create da classe Aluno
-        $alunoMock = Mockery::mock(Aluno::class);
-        $alunoMock->shouldReceive('create')->andReturnUsing(
-            function ($attributes) {
-                // Simulando um erro de banco de dados
-                return $attributes['nome'] === 'Erro' ? false : true;
-            }
-        );
-
-        // Substitui o método create do Aluno pelo mock criado acima
-        $this->app->instance(Aluno::class, $alunoMock);
-
-        $this->expectException(\Exception::class);
-        $controller->salvar($request);
-    }
+    // Adicione mais testes conforme necessário
 }
