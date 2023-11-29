@@ -8,7 +8,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use App\Models\Escola;
 
-class EscolaTestModify extends TestCase
+class EscolaTest extends TestCase
 {
     /**
      * Verifica se as colunas do modelo Escola estão corretas.
