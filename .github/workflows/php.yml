@@ -11,26 +11,14 @@ permissions:
 
 jobs:
   build:
-    
 
     runs-on: ubuntu-latest
 
-   # services:
-    #  postgres:
-     #   image: postgres:latest
-      #  env:
-       #   POSTGRES_DB: projeto-b2
-        #  POSTGRES_USER: postgres
-         # POSTGRES_PASSWORD: admin
-        #ports:
-         # - 5432:5432
-        #options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
-    - uses: actions/checkout@v3     
+    - uses: actions/checkout@v3
 
-   # - name: Validate composer.json and composer.lock
-   #   run: composer validate --strict
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
 
     - name: Cache Composer packages
       id: composer-cache
@@ -42,9 +30,8 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run:  composer install --prefer-dist --no-progress
-         
-    #composer require laravel/database-testing --dev
+      run: composer install --prefer-dist --no-progress
+
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
   tests:
@@ -65,18 +52,10 @@ jobs:
             coverage: xdebug
             
         - name: Install dependencies with composer
-          run: |
-            composer update --no-ansi --no-interaction --no-progress
-            composer require mockery/mockery --dev
-        
-       # - name : eu que add banco de dados teste
-       #   run: php artisan migrate --env=testing
-
+          run: composer update --no-ansi --no-interaction --no-progress
           
-       
         - name: Run tests with phpunit/phpunit
-          run: vendor/bin/phpunit --coverage-clover=coverage.xml 
-
+          run: vendor/bin/phpunit --coverage-clover=coverage.xml
           
         - name: SonarCloud Scan
           uses: SonarSource/sonarcloud-github-action@master

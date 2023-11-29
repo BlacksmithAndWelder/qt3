@@ -13,13 +13,11 @@ class AlunoController extends Controller{
         $listaAluno = Aluno::get();
         return view('aluno.listar', compact('listaAluno'));
     }
-    
     public function criar(){
         $aluno = new Aluno();
-        $listaTurma = Turma::where('ativo', true)->get(); 
+        $listaTurma = Turma::where('ativo', true)->get();
         return view('aluno.criar',compact('aluno', 'listaTurma'));
     }
-
     public function salvar(AlunoRequest $request){
         try{
             
@@ -48,7 +46,7 @@ class AlunoController extends Controller{
     public function editar($id){
         try {
             $aluno = Aluno::with('turma', 'turma.escola')->find($id);
-            $listaTurma = Turma::where('ativo', true)->get(); 
+            $listaTurma = Turma::where('ativo', true)->get();
             
             return view('aluno.editar', compact('aluno', 'listaTurma'));
         } catch (\Throwable $th) {

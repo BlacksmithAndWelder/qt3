@@ -14,7 +14,7 @@ class SuporteTarefaStatusController extends Controller
         $listaSuporteTarefaStatus = SuporteTarefaStatus::get();
         return view('suporte-tarefa-status.listar', compact('listaSuporteTarefaStatus'));
     }
-    public function criar(){
+    public function criar(){ 
         $suporteTarefaStatus = new SuporteTarefaStatus();
         return view('suporte-tarefa-status.criar',compact('suporteTarefaStatus'));
     }

@@ -14,9 +14,9 @@ class TurmaController extends Controller{
         return view('turma.listar', compact('listaTurma'));
     }
     public function criar(){
-        $turma          = new turma();
+        $turma          = new Turma();
         $listaEscolas   = Escola::get();
-        return view('turma.criar',compact('Turma', 'listaEscolas'));
+        return view('turma.criar',compact('turma', 'listaEscolas'));
     }
     public function salvar(TurmaRequest $request){
         try{
