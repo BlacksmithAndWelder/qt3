@@ -1,14 +1,26 @@
 version: '3.0'
 
 services:
-  web:
+   postgres:
+    image: postgres:15.1-alpine
+    container_name: db-projeto-b2
+    environment:
+      POSTGRES_DB: projeto-b2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/db-projeto-b2
+    network_mode: "host"
+    volumes:
+      - dbpostgres:/data/db-projeto-b2
+    restart: unless-stopped
+   web:
     image: projeto-b2
     privileged: true 
     container_name: projeto-b2
+    network_mode: "host"
     volumes:
       - ./:/projeto/
-
-    network_mode: "host"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command: ["sleep","infinity"]
+    command: ["su","barreto","/projeto/install_server.sh","sleep","infinity"]
+    #
+volumes:
+  dbpostgres:

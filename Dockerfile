@@ -42,4 +42,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN adduser --disabled-password --gecos "" barreto
 RUN usermod -aG sudo barreto
 
+#COPY install_server.sh /home/barreto/
+
 EXPOSE 8000
+
+
+
+
+
