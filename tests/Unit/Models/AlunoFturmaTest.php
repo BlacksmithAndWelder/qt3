@@ -1,8 +1,6 @@
 <?php
 
-/**
- * @codeCoverageIgnore
- */
+
 
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
@@ -10,9 +8,7 @@ use App\Models\Turma;
 
 class AlunoFTurmaTest extends TestCase
 {   
-    /**
- * @codeCoverageIgnore
- */
+   
     public function testTurmaRelationship()
     {
         // Create a mock of the Turma model
