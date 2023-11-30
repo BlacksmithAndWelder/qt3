@@ -1,7 +1,5 @@
 <?php
-/**
- * @codeCoverageIgnore
- */
+
 use PHPUnit\Framework\TestCase;
 use App\Models\Turma;
 use App\Models\Escola;

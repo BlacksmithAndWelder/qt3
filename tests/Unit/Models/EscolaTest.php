@@ -1,7 +1,4 @@
 <?php
-/**
- * @codeCoverageIgnore
- */
 
 namespace Tests\Unit;
 
