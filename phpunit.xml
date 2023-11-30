@@ -13,15 +13,15 @@
         </testsuite>
     </testsuites>
     
-    <coverage processUncoveredFiles="true">
+  <!-- <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./app</directory>
         </include>
         <exclude>
             <directory suffix=".php">./tests</directory>
         </exclude>
-    </coverage>
-    
+    </coverage>-->
+
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
