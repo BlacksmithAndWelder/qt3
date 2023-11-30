@@ -13,11 +13,11 @@
         </testsuite>
     </testsuites>
     
-  <!-- <coverage processUncoveredFiles="true">
+  <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./app</directory>
         </include>
-        <exclude>
+       <!-- <exclude>
             <directory suffix=".php">./tests</directory>
         </exclude>
     </coverage>-->
