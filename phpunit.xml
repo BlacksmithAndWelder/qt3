@@ -14,10 +14,10 @@
     </testsuites>
       <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">app</directory>
         </include>
         <exclude>
-            <directory suffix=".php">./tests</directory>
+            <directory suffix=".php">tests</directory>
         </exclude>
     </coverage>
     <php>
