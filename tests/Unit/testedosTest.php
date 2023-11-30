@@ -1,6 +1,6 @@
 <?php
 use Tests\TestCase;
-use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\Web\UsuarioController;
 use App\Http\Requests\Usuario\Request as UsuarioRequest;
 use Mockery;
 
