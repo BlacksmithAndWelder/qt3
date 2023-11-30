@@ -15,6 +15,7 @@
     <filter>
         <blacklist>
             <directory>./tests</directory>
+        </blacklist>
     </filter>
     <coverage processUncoveredFiles="true">
         <include>
