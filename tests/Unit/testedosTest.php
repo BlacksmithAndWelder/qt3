@@ -2,6 +2,7 @@
 use Tests\TestCase;
 use App\Http\Controllers\Web\Usuario\UsuarioController;
 use App\Http\Requests\Usuario\Request as UsuarioRequest;
+use App\Models\Usuario; // Importe o modelo real
 use Mockery;
 
 class UsuarioControllerTest extends TestCase
@@ -22,8 +23,13 @@ class UsuarioControllerTest extends TestCase
             'email' => 'usuario@teste.com',
         ]);
 
+        // Criar um mock para o modelo de usuário
+        $usuarioMock = Mockery::mock(Usuario::class);
+        $usuarioMock->shouldReceive('create')->once(); // Espera que o método create seja chamado uma vez
+
         // Substituir a instância real pelo mock no contêiner de serviços
         $this->app->instance(UsuarioRequest::class, $requestMock);
+        $this->app->instance(Usuario::class, $usuarioMock);
 
         // Instanciar o controlador
         $usuarioController = new UsuarioController();
