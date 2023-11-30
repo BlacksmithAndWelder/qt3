@@ -19,8 +19,8 @@
         </include>
        <!-- <exclude>
             <directory suffix=".php">./tests</directory>
-        </exclude>
-    </coverage>-->
+        </exclude> -->
+    </coverage>
 
     <php>
         <server name="APP_ENV" value="testing"/>
