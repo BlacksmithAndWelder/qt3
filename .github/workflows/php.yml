@@ -77,7 +77,7 @@ jobs:
           
        
         - name: Run tests with phpunit/phpunit
-          run: vendor/bin/phpunit --coverage-clover=coverage.xml --whitelist app/
+          run: vendor/bin/phpunit --coverage-clover=coverage.xml --whitelist app
 
           
         - name: SonarCloud Scan
