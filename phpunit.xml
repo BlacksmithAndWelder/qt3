@@ -6,11 +6,9 @@
 >
     <filter>
     <whitelist>
-      <directory suffix=".php">/home/ddohr/git/project/</directory>
+      <directory suffix=".php">./app</directory>
     <exclude>
-      <directory suffix=".php">/home/ddohr/git/project/vendor/</directory>
-      <directory suffix=".php">/home/ddohr/git/project/plugins/</directory>
-      <directory suffix=".php">/home/ddohr/git/project/test/</directory>
+      <directory suffix=".php">./tests</directory>
     </exclude>
     </whitelist>
   </filter>
