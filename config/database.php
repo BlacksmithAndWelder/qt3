@@ -144,10 +144,4 @@ return [
 
     ],
 
-    'testing' => [
-        'driver' => 'sqlite',
-        'database' => ':memory:',
-        'prefix' => '',
-    ],
-    
 ];
