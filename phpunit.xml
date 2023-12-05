@@ -4,8 +4,17 @@
          bootstrap="vendor/autoload.php"
          colors="true"
 >
-    
-    <testsuites>
+    <filter>
+    <whitelist>
+      <directory suffix=".php">/home/ddohr/git/project/</directory>
+    <exclude>
+      <directory suffix=".php">/home/ddohr/git/project/vendor/</directory>
+      <directory suffix=".php">/home/ddohr/git/project/plugins/</directory>
+      <directory suffix=".php">/home/ddohr/git/project/test/</directory>
+    </exclude>
+    </whitelist>
+  </filter>
+  <!--  <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
@@ -17,7 +26,7 @@
         <include>
             <directory suffix=".php">./app</directory>
         </include>
-    </coverage>
+    </coverage> -->
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
