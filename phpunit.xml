@@ -17,7 +17,7 @@
             <directory suffix=".php">app</directory>
         </include>
         <exclude>
-            <directory suffix=".php">tests</directory>
+            <directory suffix=".php">./tests/Unit</directory>
         </exclude>
     </coverage>
     <php>
