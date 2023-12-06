@@ -4,9 +4,13 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use App\Models\Escola;
-
+/**
+ * @codeCoverageIgnore
+ */
 class EscolaTest extends TestCase
-{
+{   /**
+    * @codeCoverageIgnore
+    */
     /**
      * Verifica se as colunas do modelo Escola estão corretas.
      *

@@ -2,9 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use App\Models\SuporteTarefaStatus;
+/**
+ * @codeCoverageIgnore
+ */
 
 class SuporteTarefaStatusTest extends TestCase
-{
+{   /**
+    * @codeCoverageIgnore
+    */
     /**
      * Verifica se as colunas do modelo SuporteTarefaStatus estão corretas.
      *

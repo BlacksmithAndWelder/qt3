@@ -5,7 +5,9 @@ use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User;
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class SuporteTarefaTest extends TestCase
 {
     /**

@@ -1,9 +1,14 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use App\Models\Aluno;
-
+/**
+ * @codeCoverageIgnore
+ */
 class AlunoTest extends TestCase
-{
+{   
+    /**
+ * @codeCoverageIgnore
+ */
     /**
      * Verifica se as colunas do Aluno estão corretas.
      *
