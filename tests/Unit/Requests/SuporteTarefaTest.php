@@ -8,7 +8,7 @@ use App\Models\User;
 /**
  * @codeCoverageIgnore
  */
-class SuporteTarefaTest extends TestCase
+class SuporteTarefarTest extends TestCase
 {
     /**
      * Verifica se as colunas do modelo SuporteTarefa estão corretas.
