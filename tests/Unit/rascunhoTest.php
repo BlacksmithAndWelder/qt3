@@ -8,7 +8,7 @@ use App\Models\SuporteTarefaStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SuporteTarefatesteTest extends TestCase
+class SuporteTarefaTest extends TestCase
 {
     use RefreshDatabase;
 
