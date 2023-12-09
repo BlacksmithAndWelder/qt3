@@ -12,14 +12,15 @@
         </testsuite>
     </testsuites>
      <filter>
-        <whitelist processUncoveredFilesFromWhitelist="false">
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">app</directory>
              <exclude>
                 <directory suffix=".php">tests</directory>
+                 <directory suffix=".php">tests/Unit</directory>
             </exclude>
         </whitelist>
     </filter>
-    <coverage processUncoveredFilesFromWhitelist="false">
+    <coverage processUncoveredFilesFromWhitelist="true">
         <include>
             <directory suffix=".php">./app</directory>
         </include>
