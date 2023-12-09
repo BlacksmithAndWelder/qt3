@@ -46,8 +46,8 @@ jobs:
     - name: Install dependencies
       run:  
         composer install --prefer-dist --no-progress
-        composer require mockery/mockery --dev
-        composer require laravel/database-testing --dev
+        composer require mockery/mockery 
+        composer require laravel/database-testing 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
   tests:
