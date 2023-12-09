@@ -44,10 +44,8 @@ jobs:
       run:  rm -rf vendor
 
     - name: Install dependencies
-      run:  
-        composer install --prefer-dist --no-progress
-        composer require mockery/mockery 
-        composer require laravel/database-testing 
+      run:  composer install --prefer-dist --no-progress
+        
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
   tests:
@@ -71,7 +69,7 @@ jobs:
           run: |
             composer update --no-ansi --no-interaction --no-progress
             composer require mockery/mockery --dev
-        
+            composer require laravel/database-testing --dev
        # - name : eu que add banco de dados teste
        #   run: php artisan migrate --env=testing
 
