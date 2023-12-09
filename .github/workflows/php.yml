@@ -69,7 +69,7 @@ jobs:
           run: |
             composer update --no-ansi --no-interaction --no-progress
             composer require mockery/mockery --dev
-            composer require laravel/database-testing --dev
+          
        # - name : eu que add banco de dados teste
        #   run: php artisan migrate --env=testing
 
