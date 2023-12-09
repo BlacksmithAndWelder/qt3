@@ -18,17 +18,17 @@
         <exclude>
             <directory suffix=".php">tests</directory>
         </exclude>
+         <filter>
+            <whitelist  processUncoveredFilesFromWhitelist="true">
+                <directory>app</directory>
+            </whitelist>
+            <blacklist>
+                <directory>vendor</directory>
+                <directory>tests</directory>
+            </blacklist>
+          </filter>
     </coverage>
-    <filter>
-        <whitelist  processUncoveredFilesFromWhitelist="true">
-          <directory>app</directory>
-        </whitelist>
-        <blacklist>
-            <directory>vendor</directory>
-            <directory>tests</directory>
-        </blacklist>
-    </filter>
-
+   
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
