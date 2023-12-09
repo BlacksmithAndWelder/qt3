@@ -19,10 +19,10 @@
             <directory suffix=".php">tests</directory>
         </exclude>
     </coverage>
-    
-    <whitelist>
+    <filter>
+        <whitelist>
+          <directory>app</directory>
         </whitelist>
-              <directory>app</directory>
         <blacklist>
             <directory>vendor</directory>
             <directory>tests</directory>
