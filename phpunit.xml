@@ -12,7 +12,7 @@
         </testsuite>
     </testsuites>
      <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">app</directory>
             <!-- Adicione mais diretórios ou arquivos conforme necessário -->
         </whitelist>
