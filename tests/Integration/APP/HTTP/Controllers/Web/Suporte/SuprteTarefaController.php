@@ -8,7 +8,7 @@ use App\Models\SuporteTarefa;
 use App\Models\SuporteTarefaStatus;
 use App\Models\User as Usuario;
 
-class SuporteTarefaControllerTest extends TestCase
+class SuporteTarefaControllerIntTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -5,7 +5,7 @@ namespace Tests\Unit\Requests;
 use Tests\TestCase;
 use App\Http\Requests\Escola\Request;
 
-class EscolaRequestTest extends TestCase
+class EscolaRequestIntTest extends TestCase
 {
     /** @test */
     public function it_has_correct_validation_rules()
