@@ -1,12 +1,12 @@
 
 
 Code Coverage Report:     
-  2023-12-09 18:31:46     
+  2023-12-09 18:32:55     
                           
  Summary:                 
   Classes: 35.71% (10/28) 
-  Methods: 29.73% (22/74) 
-  Lines:   13.66% (66/483)
+  Methods: 31.08% (23/74) 
+  Lines:   14.08% (68/483)
 
 App\Console\Kernel
   Methods:  50.00% ( 1/ 2)   Lines:  66.67% (  2/  3)
@@ -15,7 +15,7 @@ App\Exceptions\Handler
 App\Http\Controllers\Controller
   Methods:  ( 0/ 0)   Lines:  (  0/  0)
 App\Http\Controllers\Web\Aluno\AlunoController
-  Methods:   0.00% ( 0/ 6)   Lines:   0.00% (  0/ 62)
+  Methods:  16.67% ( 1/ 6)   Lines:   3.23% (  2/ 62)
 App\Http\Controllers\Web\Escola\EscolaController
   Methods:   0.00% ( 0/ 6)   Lines:   0.00% (  0/ 59)
 App\Http\Controllers\Web\Nasa\NasaController
