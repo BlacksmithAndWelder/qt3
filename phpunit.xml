@@ -14,22 +14,9 @@
      <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">app</directory>
-             <exclude>
-                <directory suffix=".php">tests</directory>
-                 <directory suffix=".php">tests/Unit</directory>
-            </exclude>
         </whitelist>
     </filter>
-    <coverage processUncoveredFilesFromWhitelist="true">
-        <include>
-            <directory suffix=".php">./app</directory>
-        </include>
-        <exclude>
-            <directory suffix=".php">./tests</directory>
-             <directory suffix=".php">tests/Unit</directory>
-        </exclude>
-    </coverage>
-   
+    
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
