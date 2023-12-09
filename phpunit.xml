@@ -14,7 +14,9 @@
      <filter>
         <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">app</directory>
-            <!-- Adicione mais diretórios ou arquivos conforme necessário -->
+             <exclude>
+                <directory suffix=".php">tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 <!--<coverage>
