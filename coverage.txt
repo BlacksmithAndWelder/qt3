@@ -1,25 +1,25 @@
 
 
-Code Coverage Report:     
-  2023-12-09 19:26:35     
-                          
- Summary:                 
-  Classes: 35.71% (10/28) 
-  Methods: 31.08% (23/74) 
-  Lines:   14.08% (68/483)
+Code Coverage Report:      
+  2023-12-09 22:14:39      
+                           
+ Summary:                  
+  Classes: 39.29% (11/28)  
+  Methods: 39.19% (29/74)  
+  Lines:   24.02% (116/483)
 
 App\Console\Kernel
   Methods:  50.00% ( 1/ 2)   Lines:  66.67% (  2/  3)
 App\Exceptions\Handler
-  Methods:   0.00% ( 0/ 1)   Lines:   0.00% (  0/  2)
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  2/  2)
 App\Http\Controllers\Controller
   Methods:  ( 0/ 0)   Lines:  (  0/  0)
 App\Http\Controllers\Web\Aluno\AlunoController
-  Methods:  16.67% ( 1/ 6)   Lines:   3.23% (  2/ 62)
+  Methods:  33.33% ( 2/ 6)   Lines:  12.90% (  8/ 62)
 App\Http\Controllers\Web\Escola\EscolaController
-  Methods:   0.00% ( 0/ 6)   Lines:   0.00% (  0/ 59)
+  Methods:  33.33% ( 2/ 6)   Lines:  32.20% ( 19/ 59)
 App\Http\Controllers\Web\Nasa\NasaController
-  Methods:   0.00% ( 0/ 1)   Lines:   0.00% (  0/ 11)
+  Methods:   0.00% ( 0/ 1)   Lines:  63.64% (  7/ 11)
 App\Http\Controllers\Web\Suporte\SuporteTarefaController
   Methods:   0.00% ( 0/ 6)   Lines:   0.00% (  0/ 69)
 App\Http\Controllers\Web\Suporte\SuporteTarefaStatusController
@@ -47,7 +47,7 @@ App\Http\Middleware\TrustProxies
 App\Http\Middleware\VerifyCsrfToken
   Methods:  ( 0/ 0)   Lines:  (  0/  0)
 App\Http\Requests\Aluno\Request
-  Methods:   0.00% ( 0/ 3)   Lines:   0.00% (  0/ 15)
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% ( 15/ 15)
 App\Http\Requests\Escola\Request
   Methods: 100.00% ( 3/ 3)   Lines: 100.00% ( 15/ 15)
 App\Http\Requests\SuporteTarefaStatus\Request
@@ -87,7 +87,7 @@ App\Models\User
 App\Providers\AppServiceProvider
   Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
 App\Providers\AuthServiceProvider
-  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+  Methods:   0.00% ( 0/ 1)   Lines:   0.00% (  0/  1)
 App\Providers\BroadcastServiceProvider
   Methods:   0.00% ( 0/ 1)   Lines:   0.00% (  0/  2)
 App\Providers\EventServiceProvider
